@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="layouts/main_admin_layout"
+>
+<th:block layout:fragment="titleAdmin">
+    <title>Danh sách sản phẩm</title>
+</th:block>
+
+
+  <main layout:fragment="content">
+    <div class="width-full-sidebar">
+      <div class="container-fluid">
+        <div class="row p-5 pt-0" >
+          <div class="row">
+            <div class="col-sm-8">
+              <h3 class="p-4">Product</h3>
+            </div>
+            <div class="col-sm-4 text-end">
+              <a href="/admin/products/import" class="btn btn-secondary btn-secondary m-4">Import File Excel</a>
+              <a href="/admin/product" class="btn btn-warning btn-warning">New product</a>
+            </div>
+          </div>
+
+          <div class="col-md-12 bg-white">
+            <div class="row justify-content-start align-items-center">
+              <div class="col-md-1 text-end">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  id="resetFilter"
+                >
+                  <i class="fa fa-refresh fs-4" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="col-md-11">
+                <div class="input-group p-4 ps-0">
+                  <button id="btnsearch" class="btn btn-secondary" onclick="textSearch()">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </button>
+                  <input
+                    aria-describedby="btnsearch"
+                    type="text"
+                    
+                    class="form-control"
+                    placeholder="Start typing to search for products"
+                    id="filterProduct"
+                    th:value="${textSearch}"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 bg-white">
+            <div class="table__product">
+              <table class="table">
+                <thead>
+                  <tr role="row">
+                    <th class="">#</th>
+                    <th class="">Image</th>
+                    <th class="w-25" style="min-width: 405px !important">
+                      <a href="#" onclick="sortProducts('name'); return false;"
+                        >Name <i class="fa fa-sort" aria-hidden="true"></i
+                      ></a>
+                    </th>
+                    <th class="">
+                      <a
+                        href="#"
+                        onclick="sortProducts('productLine'); return false;"
+                        >Product Line
+                        <i class="fa fa-sort" aria-hidden="true"></i
+                      ></a>
+                    </th>
+                    <th class="">
+                      <a
+                        href="#"
+                        onclick="sortProducts('category'); return false;"
+                        >Category <i class="fa fa-sort" aria-hidden="true"></i
+                      ></a>
+                    </th>
+                    <th class="text-end">
+                      <a href="#" onclick="sortProducts('price'); return false;"
+                        >Price <i class="fa fa-sort" aria-hidden="true"></i
+                      ></a>
+                    </th>
+                    <th class="text-end">
+                      <a
+                        href="#"
+                        onclick="sortProducts('promotionPrice'); return false;"
+                        >Promotion Price
+                        <i class="fa fa-sort" aria-hidden="true"></i
+                      ></a>
+                    </th>
+                    <th class="text-center" style="width: 100px">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="tableProduct">
+                  <tr class="h-90px" th:each="product, stt: ${products}">
+                    <td class="align-middle" th:text="${stt.index+1}"></td>
+                    <td class="align-middle">
+                      <img
+                        th:src="'/images/products/'+${product.avatar}"
+                        alt="image"
+                        width="70px"
+                        height="70px"
+                      />
+                    </td>
+                    <td class="align-middle">
+                      <div class="col product__name">
+                        <a th:href="'/admin/product/'+ ${product.id}" th:text="${product.name}">Product Name</a>
+                      </div>
+                      <div class="col">
+                        ID: <span th:text="${product.id}">id</span>
+                      </div>
+                    </td>
+                    <td class="align-middle product__line">
+                      <a
+                        href="#"
+                        class="align-items-center"
+                        th:text="${product.productLine != null ? product.productLine.name: 'Không xác định'}"
+                        >product_line</a
+                      >
+                    </td>
+                    <td class="align-middle product__line">
+                      <a href="#"
+                       class="align-items-center"
+                       th:text="${product.category != null ? product.category.name : 'Không xác định'}">category</a>
+                    </td>
+                    <td class="align-middle">
+                      <h6
+                        href="#"
+                        class="align-middle m-0 text-end priceVietNam"
+                        th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                      >
+                        999999d
+                      </h6>
+                    </td>
+                    <td class="align-middle">
+                      <h6
+                        href="#"
+                        class="align-middle m-0 text-end priceVietNam"
+                        th:text="${#numbers.formatDecimal(product.promotionPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                      >
+                        10099999d
+                      </h6>
+                    </td>
+                    <td class="align-middle text-center">
+                      <a class="btn btn-outline-dark" th:href="'/admin/product/'+ ${product.id}" >
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-7 bg-white pt-3 pb-3">
+            <div class="d-flex align-content-center" style="height: 40px">
+              <button
+                class="btn btn-outline-dark"
+                id="btnPrePage"
+                disabled
+                onclick="goToPageClick('PRE_PAGE')"
+              >
+                Previous
+              </button>
+              <div
+                id="listBtnPage"
+                class="ms-3 me-3 d-flex align-content-center"
+              >
+                <th:block type="button" th:each="page, stt: ${totalPages}">
+                  <span class="ms-1 me-1">
+                    <button
+                      type="button"
+                      th:attr="onclick=|goToPageClick('${page}')|"
+                      th:class="${stt.index == pageCurrent}? 								
+										'btn btn-warning': 
+										(${page == '...'} ? 'btn btn-light' :
+										'btn btn-outline-secondary')"
+                      style="width: 50px"
+                      th:text="${page}"
+                    >
+                      _
+                    </button>
+                  </span>
+                </th:block>
+              </div>
+              <button
+                type="button"
+                id="btnNextPage"
+                class="btn btn-primary"
+                onclick="goToPageClick('NEXT_PAGE')"
+              >
+                Next
+              </button>
+            </div>
+            <div
+              class="input-group-sm mt-3 d-flex align-items-center justify-content-around"
+              style="width: 250px"
+            >
+              <strong class="d-inline-block w-50">Go to: </strong>
+              <input
+                class="form-control input-group-sm"
+                min="1"
+                max="${totalPages.length}"
+                id="ipGoToPage"
+                type="number"
+                aria-describedby="btnGoToPage"
+              />
+              <button
+                type="button"
+                id="btnGoToPage"
+                class="btn btn-outline-primary btn-sm"
+                onclick="goToPageClick('GO_TO_PAGE')"
+              >
+                GO
+              </button>
+            </div>
+          </div>
+          <div class="col-md-5 bg-white pt-3 pb-3">
+            <div class="d-flex justify-content-end align-items-center">
+              <div>
+                <span class="text-secondary"
+                  >Showing <span id="minQuantityProductOfPage"> 1</span> to
+                  <span
+                    id="maxQuantityProductOfPage"
+                    class=""
+                    th:text="${rowOfPage}"
+                    >10</span
+                  >
+                  of <span th:text="${maxProducts}"> 320</span></span
+                >
+                <span class="text-secondary">/</span>
+                <span class="text-secondary">Rows per page</span>
+              </div>
+              <select
+                class="ms-3 form-select"
+                style="width: 100px"
+                id="selectShowProduct"
+              >
+                <option value="10" th:selected="${rowOfPage} == 10">10</option>
+                <option value="25" th:selected="${rowOfPage} == 25">25</option>
+                <option value="50" th:selected="${rowOfPage} == 50">50</option>
+                <option value="100" th:selected="${rowOfPage} == 100">
+                  100
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+    </div>
+    <script defer th:inline="javascript">
+      	 /*<![CDATA[*/
+      	 let maxPages = /*[[${maxPages}]]*/;
+      	 let maxQuantityProducts = /*[[${maxProducts}]]*/;
+      	 let pageCurrent = null;
+      	 let rowOfPage = /*[[${rowOfPage}]]*/;
+         let textSearchSort = /*[[${textSearch}]]*/;
+      	 let sort = ''
+      	 let orderby = ''
+      	 try {
+      		sort = window.location.search.split('&').find(e => e.includes('sort')).split('=')[1]
+      		orderby = window.location.search.split('&').find(e => e.includes('orderby')).split('=')[1]
+      	 } catch (error) {
+
+      	 }
+
+
+      	    /*]]>*/
+      	function goToPageClick(page) {
+      		const oldPage = pageCurrent
+      		switch (page) {
+      			case '...':
+      				return;
+      			case 'PRE_PAGE':{
+      				pageCurrent--;
+      				break;
+      			}
+      			case 'NEXT_PAGE': {
+      				pageCurrent++;
+      				break;
+      			}
+      			case 'GO_TO_PAGE': {
+      				valuePage = $('#ipGoToPage').val();
+      				if(valuePage >= 1 && valuePage <= maxPages) {
+      					pageCurrent = valuePage
+      				} else {
+      					alert("NO VALUE PAGE")
+      					return;
+      				}
+      				break;
+      			}
+      			default: {
+      				pageCurrent = page;
+      			}
+      		}
+      		if(oldPage == pageCurrent) {
+      			return;
+      		}
+      		$.ajax({
+      		type: "GET",
+      		url: "/api/admin/product/filter",
+      		data: {
+      			page: pageCurrent,
+      			rowOfPage: rowOfPage,
+      			sort: sort,
+      			orderby: orderby
+      		},
+      		success: function (res) {
+      			loadProducts(res)
+      			activeBtnPage(pageCurrent)
+      		},
+      		});
+      	}
+      $("#selectShowProduct").change(function() {
+          textSearch()
+      })
+      /* Text Search */
+      $("#filterProduct").keypress(function (e) {
+        /* PHIM ENTER */
+          if(e.keyCode == 13) {
+            textSearch()
+          }
+      })
+
+      function textSearch() {
+           rowOfPage =  $("#selectShowProduct").val()
+           const value  =  $("#filterProduct").val()
+      	    window.location.href = `/admin/products?text=${value}&rows=${rowOfPage}`
+      }
+
+      function sortProducts(bySort) {
+      	const locationHref = window.location.search
+      	console.log(locationHref)
+      	console.log(locationHref.includes('asc'))
+      	if(locationHref.includes('asc'))
+      		window.location.href  = `/admin/products?text=${textSearchSort}&rows=${rowOfPage}&sort=${bySort}&orderby=desc`
+      	else
+      		window.location.href = `/admin/products?text=${textSearchSort}&rows=${rowOfPage}&sort=${bySort}&orderby=asc`
+      }
+      /* RESET FILTER */
+      $('#resetFilter').click(function() {
+      	window.location.href = window.location.pathname
+      })
+      function activeBtnPage(page) {
+      	let totalPages = []
+      	let MAX_TOTAL_PAGES = 7;
+      	if(page <= 4) {
+      		for (let i = 1; i <= 5; i++) {
+      			totalPages.push(i);
+      		}
+      		totalPages.push('...');
+      		totalPages.push(maxPages);
+      	}
+      	if(page > 4 && page < maxPages - 3) {
+      		totalPages.push(1);
+      		totalPages.push('...');
+      		for (let i = page - 1; i <= Number.parseInt(page) + 1; i++) {
+      			totalPages.push(i);
+      		}
+      		totalPages.push('...');
+      		totalPages.push(maxPages);
+      	}
+      	if(page >= maxPages - 3 && page <= maxPages) {
+      		totalPages.push(1);
+      		totalPages.push('...');
+      		for (let i = maxPages - 4; i <= maxPages; i++) {
+      			totalPages.push(i);
+      		}
+      	}
+      	$("#listBtnPage span").remove()
+      	totalPages.forEach(e => $("#listBtnPage").append(`
+      						<span class=" ms-1 me-1 ">
+      							<button  type="button"
+      							onclick="goToPageClick('${e}')"
+      							class="${e == page?'btnGoToPage btn btn-warning': (e == '...' ? 'btn btn-light' :'btnGoToPage btn btn-outline-secondary')}"
+      							style="width: 50px"
+      							>${e}</button>
+      						</span>
+      	`))
+      	/* SET BTN NEXT_PAGE */
+      	if(page == maxPages) {
+      		$("#btnNextPage").prop("disabled", true)
+      	} else {
+      		$("#btnNextPage").prop("disabled", false)
+      	}
+      	/* SET BTN PRR_PAGE */
+      	if(page == 1) {
+      		$("#btnPrePage").prop("disabled", true)
+      	} else {
+      		$("#btnPrePage").prop("disabled", false)
+      	}
+      	/* CHANGE SHOWING */
+      	const valueShowProduct = $('#selectShowProduct').val()
+      	$('#minQuantityProductOfPage').text(Number.parseInt(page*valueShowProduct-valueShowProduct)+1)
+      	$('#maxQuantityProductOfPage').text(Math.min(page*valueShowProduct, maxQuantityProducts))
+
+      }
+      const numberFormat = new Intl.NumberFormat("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            });
+      	function loadProducts(products) {
+      		$("#tableProduct tr").remove()
+      		const valueShowProduct = $('#selectShowProduct').val()
+      		let start = Number.parseInt(pageCurrent*valueShowProduct-valueShowProduct)+1;
+      		products.map(product => $("#tableProduct").append(
+      		`
+      		<tr class="h-90px" >
+      								<td class="align-middle">
+      									${start++}
+      								</td>
+      								<td class="align-middle"><img
+      									src="/images/products/${product.avatar}" alt="image"
+      									width="70px" height="70px"></td>
+      								<td class="align-middle">
+      									<div class="col product__name">
+      										<a href="/admin/product/${product.id}">${product.name}</a>
+      									</div>
+      									<div class="col">
+      										ID: <span >${product.id}</span>
+      									</div>
+      								</td>
+      								<td class="align-middle product__line"><a href="#"
+      									class="align-items-center"
+      									>${product.productLineDto.name}</a></td>
+      								<td class="align-middle product__line"><a href="#"
+      									class="align-items-center">${product.category.name}</a></td>
+      								<td class="align-middle">
+      									<h6 href="#" class="align-middle m-0 text-end priceVietNam"
+      										>${numberFormat.format(product.price.toFixed(0))}</h6>
+      								</td>
+      								<td class="align-middle">
+      									<h6 href="#" class="align-middle m-0 text-end priceVietNam"
+      										>${numberFormat.format(product.promotionPrice.toFixed(0))}</h6>
+      								</td>
+      								<td class="align-middle text-center"><a class="btn btn-outline-dark" href="/admin/product/${product.id}" >
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                      </a></td>
+      							</tr>
+      		`
+      		))
+
+      	}
+    </script>
+  </main>
+</html>

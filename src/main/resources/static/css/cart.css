@@ -1,0 +1,20 @@
+.order {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  position: relative;
+  padding-bottom: 10px;
+}
+.order__img__quantity {
+  background: rgb(243, 122, 24);
+  width: 23px;
+  height: 23px;
+  position: absolute;
+  right: -4px;
+  top: -4px;
+  color: #fff;
+  font-size: 13px;
+  padding: 2px;
+  text-align: center;
+  border-radius: 100%;
+}

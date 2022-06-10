@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="layouts/main_layout"
+>
+  <th:block layout:fragment="title">
+    <title th:text="'Giày '+ ${brand.name} + ' chính hãng'"></title>
+  </th:block>
+
+  <main layout:fragment="content">
+    <div class="container">
+      <nav aria-label="breadcrumb" class="parent_breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+          <li
+            class="breadcrumb-item active"
+            aria-current="page"
+            th:text="${brand.name}"
+          ></li>
+        </ol>
+      </nav>
+    </div>
+    <div class="container">
+      <ul
+        class="d-flex flex-wrap p-3 bg-secondary bg-opacity-10 rounded-3 border-warning border"
+        th:if="${#lists.size(brand.productLines)>0 && (brand.productLines.get(0).name != brand.name)}"
+      >
+        <li
+          class="ms-3 me-5 p-1 text-warning"
+          th:each="item:${brand.productLines}"
+          th:if="${item.name != brand.name}"
+        >
+          <a
+            th:href="@{'/product/product-line/'+${item.id}}"
+            class="text-primary hover-text-warning"
+            th:text="${item.name}"
+          ></a>
+        </li>
+      </ul>
+    </div>
+
+    <th:block th:each="item : ${brand.productLines}">
+      <div class="container">
+        <div class="titlemain">
+          <div>
+            <span><a href="#" th:text="${item.name}"></a></span>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div th:id="'listcart'+${item.id}" class="row list__card">
+          <div
+            class="col-md-3 col-sm-4"
+            th:each="item1,status1 : ${item.productPage.content}"
+          >
+            <a th:href="'/product/'+${item1.id}" class="card">
+              <div class="card__ribbon"><span>Đang hot</span></div>
+              <div class="card__img">
+                <img
+                  th:src="@{'/images/products/'+${item1.avatar}}"
+                  class="card-img-top"
+                />
+              </div>
+              <div class="card-body">
+                <h5 class="card-title" th:text="${item1.name}"></h5>
+                <p class="card-text">
+                  <span
+                    class="text-warning fs-5"
+                    th:text="${#numbers.formatDecimal(item1.promotionPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                  ></span>
+                  <span
+                    class="text-secondary fs-6 text-decoration-line-through"
+                    th:text="${#numbers.formatDecimal(item1.price, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                  ></span>
+                </p>
+              </div>
+            </a>
+          </div>
+        </div>
+        <th:block th:if="${item.productPage.totalPages>1}">
+          <a
+            page="1"
+            th:id="'more'+${item.id}"
+            th:onclick="'loadMore(this,'+${item.id}+')'"
+            class="next-category"
+          >
+            <th:block th:text="'Xem thêm giày ' + ${item.name}"></th:block>
+            <i
+              class="fa fa-arrow-circle-o-right fs-4 ms-2"
+              aria-hidden="true"
+            ></i
+          ></a>
+        </th:block>
+      </div>
+    </th:block>
+  </main>
+  <th:block layout:fragment="js">
+    <script>
+      function loadMore(obj, productLineId) {
+        let page = $(obj).attr("page");
+        page = parseInt(page) + 1;
+        $.get(
+          "/api/product/product-line",
+          {
+            productLineId: productLineId,
+            pageIndex: page,
+          },
+          function (res) {
+            addDataLoadMore(res, productLineId, page);
+          }
+        );
+      }
+
+      function format(n) {
+        return (
+          n.toFixed(0).replace(/./g, function (c, i, a) {
+            return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+          }) + " đ"
+        );
+      }
+
+      function addDataLoadMore(res, productLineId, page) {
+        let list = res.content;
+        let html = list.map((item) => {
+          return `
+                 <div class="col-md-3 col-sm-4" >
+                    <a href="/product/${item.id}" class="card">
+                      <div class="card__ribbon"><span>Đang hot</span></div>
+                      <div class="card__img">
+                        <img
+                                src="/images/products/${item.avatar}"
+                                class="card-img-top"
+                        />
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title" >
+                               ${item.name}
+                        </h5>
+                        <p class="card-text">
+                          <span class="text-warning fs-5" >${format(
+                            item.promotionPrice
+                          )}</span>
+                          <span class="text-secondary fs-6 text-decoration-line-through">
+                                ${format(item.price)}
+                          </span>
+                        </p>
+                      </div>
+                    </a>
+                 </div>
+            `;
+        });
+        html = html.join("");
+        let listCartId = "#listcart" + productLineId;
+        $(listCartId).append(html);
+        let moreId = "#more" + productLineId;
+        if (res.totalPages == page) {
+          $(moreId).hide();
+        } else {
+          $(moreId).attr("page", page);
+        }
+      }
+    </script>
+  </th:block>
+</html>

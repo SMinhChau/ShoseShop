@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="layouts/main_admin_layout"
+>
+<th:block layout:fragment="titleAdmin">
+    <title>Thêm sản phẩm</title>
+</th:block>
+
+<main layout:fragment="content">
+      <div class="width-full-sidebar">
+        <div class="container-fluid">
+          <form
+            class="row p-5 pt-0"
+            action="#"
+            th:action="@{/admin/product}"
+            th:object="${product}"
+            method="post"
+            enctype="multipart/form-data"
+            onsubmit="if(!confirm('Xác nhận thêm sản phẩm')) return false"
+          >
+            <div class="row justify-content-between">
+              <h3 class="p-3 col-md-6" th:text="${title}">Product</h3>
+              <a href="/admin/products/import" class=" col-md-3 btn btn-secondary btn-secondary m-4">IMPORT File Excel <i class="fa fa-upload" aria-hidden="true"></i></a>
+            </div>
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-md-12 p-3 bg-white border border-2">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <p class="d-flex justify-content-between">
+                        <span class="fs-5">Tên sản phẩm<span class="ms-2 text-danger">(*)</span></span>
+                      </p>
+                      <div class="alert alert-warning" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                      <input
+                        th:field="*{name}"
+                        type="text"
+                        class="form-control"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 p-3 bg-white mt-4 border border-2">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p class="d-flex justify-content-between">
+                        <span class="fs-5">Brands <span class="ms-2 text-danger">(*)</span></span>
+                      </p>
+                      <select class="form-select" id="brandSelect" required>
+                        <option value="">Select Brand</option>
+                        <option
+                          th:each="item:${brands}"
+                          th:value="${item.id}"
+                          th:text="${item.name}"
+                        >
+                          1
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="alert alert-warning" th:if="${#fields.hasErrors('productLine')}" th:errors="*{productLine}"></div>
+                      <p class="d-flex justify-content-between">
+                        <span class="fs-5">Product Line<span class="ms-2 text-danger">(*)</span></span>
+                      </p>
+                      <select  th:name="productLine"  class="form-select" id="productLineSelect" required>
+                        <option value="">Select Product Line</option>
+                      </select>
+                    </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12 p-3 bg-white mt-4 border border-2">
+                    <div class="row">
+                      <div class="col-md-6">
+                      <div class="alert alert-warning" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+                        <p class="d-flex justify-content-between">
+                          <span class="fs-5">Catagories<span class="ms-2 text-danger">(*)</span></span>
+                        </p>
+                        <select th:field="*{category}"  class="form-select" id="categorySelect" required>
+                          <option value="">Select Category</option>
+                        <option
+                        th:each="category: ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}"
+                      >
+                        1
+                      </option>
+                        </select>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <p class="d-flex justify-content-between">
+                          <span class="fs-5">Trạng thái</span>
+                        </p>
+                        <select  th:field="*{status}" class="form-select" >
+                          <option th:value="true">Đang bán</option>
+                          <option  th:value="false">Ngừng bán</option>
+                        </select>
+                      </div>
+                  </div>
+                </div>
+                <div class="col-md-12 p-3 bg-white mt-4 border border-2">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p class="d-flex justify-content-between">
+                        <span class="fs-5">Giá củ<span class="ms-2 text-danger">(*)</span></span>
+                      </p>
+                      <input
+                        th:field="*{price}"
+                        type="number"
+                        class="form-control"
+                        required
+                      />
+                      <div class="alert alert-warning" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+                    </div>
+                    <div class="col-md-6">
+                      <p class="d-flex justify-content-between">
+                        <span class="fs-5">Giá mới<span class="ms-2 text-danger">(*)</span></span>
+                      </p>
+                      <input
+                        th:field="*{promotionPrice}"
+                        type="number"
+                        class="form-control"
+                        required
+                      />
+                      <div class="alert alert-warning" th:if="${#fields.hasErrors('promotionPrice')}" th:errors="*{promotionPrice}"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 p-3 bg-white mt-4 border border-2">
+                  <p>Image</p>
+                  <div>
+                  	<input
+                    id="listImage"
+                      type="file"
+                      th:name="avatarFile"
+                      multiple
+                      required
+                      class="form-control" />
+                  </div>
+                  <fieldset class="form-group">
+                    <!-- <a
+                      href="javascript:void(0)"
+                      onclick="$('#pro-image').click()"
+                      class="bg-secondary bg-opacity-10 p-3 w-100 d-block text-primary text-center rounded-3"
+                      >Click here for upload Images
+                      <i class="fa fa-upload" aria-hidden="true"></i>
+                    </a> -->
+                    <input
+                      type="file"
+                      id="pro-image"
+                      name="pro-image"
+                      style="display: none"
+                      class="form-control"
+                      multiple
+                    />
+                  </fieldset>
+                  <div class="preview-images-zone" th:name="images"></div>
+                  <div class="col-md-12">
+                    <input
+                      class="btn btn-primary mt-3 w-100"
+                      type="submit"
+                      value="Submit"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 ps-5">
+              <div class="row bg-white border border-2 p-3">
+                <div class="row">
+                  <h5>Size</h5>
+                  <table class="table tableSize">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col" class="w-25">
+                          <label class="form-check-label">
+                            <input
+                              type="checkbox"
+                              class="form-check-input checkbox-size"
+                              id="checkAllSize"
+                              
+                            />
+                            All </label
+                          >
+                        </th>
+                        <th scope="col">Quantity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="size:${sizes}">
+                        <th
+                          scope="row"
+                          class="align-middle"
+                          th:text="${size.id}"
+                        >
+                          1
+                        </th>
+                        <td class="align-middle">
+                          <div class="form-check">
+                            <input
+                              th:id="size+${size.id}"
+                              type="checkbox"
+                              class="form-check-input checkbox-size"
+                              th:value="${size.id}"
+                              th:name="sizes"
+                            />
+                            <label
+                              class="form-check-label"
+                              th:for="size+${size.id}"
+                              th:text="${size.name}"
+                            >
+                            </label>
+                          </div>
+                        </td>
+                        <td>
+                          <input
+                            th:id="quantity+${size.id}"
+                            type="number"
+                            class="form-control quantitySize"
+                            th:name="quantity"
+                            disabled
+                            required
+                          />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <script>
+            $("#productLineSelect").change(function () {
+              $("#ipProductLine").val($(this).val());
+            });
+            $("#checkAllSize").click(function () {
+              $(".checkbox-size").not(this).prop("checked", this.checked);
+              if ($(this).is(":checked")) {
+                $(".quantitySize").prop("disabled", false);
+              } else {
+                $(".quantitySize").prop("disabled", true);
+              }
+            });
+            $(".checkbox-size").click(function () {
+              var ip = $(this)
+                .parent()
+                .parent()
+                .parent()
+                .children()
+                .last()
+                .children()[0];
+              if (ip == null) return;
+              if ($(this).is(":checked")) {
+                ip.disabled = false;
+                ip.focus()
+                ip.value = "";
+              } else {
+                ip.disabled = true;
+                ip.value = "";
+              }
+              $("#checkAllSize").prop("checked", false);
+            });
+          </script>
+      
+          <script th:inline="javascript">
+            /*<![CDATA[*/
+               var brands = /*[[${brands}]]*/;
+             
+
+              var selectBrand = document.getElementById("brandSelect")
+              selectBrand.onchange = function () {
+                const idBrand = this.value
+                const productLine = brands[idBrand-1]
+                const selectProductLine = document.getElementById("productLineSelect")
+                if(idBrand == -1)
+                selectProductLine.innerHTML = '<option value="">Select Product Line</option>'
+              else
+                selectProductLine.innerHTML = ''
+      
+                productLine.productLines.map((pl) =>  {
+                const option = document.createElement("option")
+                option.setAttribute("value", pl.id)
+                option.setAttribute("text",pl.name)
+                option.innerHTML = pl.name
+                  return selectProductLine.append(option)
+                })
+      
+              }
+      
+              /* ADD SIZE */
+                $(".btnAddSize").click(function (e) {
+                 e.preventDefault();
+      
+                  const sizeCuoi = Number.parseInt($(".tableSize tr").last().children().children()[0].value)
+                  const indexCuoi = Number.parseInt(
+                    $(".tableSize tr th").last()[0].innerHTML
+                  );
+      
+                  const sizeElement = $("#sizeSelect")[0]
+                  console.log(sizeElement)
+                  $(".tableSize tbody").append(`
+                                  <tr>
+                                    <th scope="row" class="align-middle">${
+                                      indexCuoi + 1
+                                    }</th>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            class="form-control"
+                                            value=${sizeCuoi + 1}
+                                            hidden
+                                          />
+                                        <select class="form-select" id="sizeSelect">
+                                         ${sizeElement.innerHTML}
+                                         </select>
+                          </td>
+                                    <td><input type="number" class="form-control" value="100" /></td>
+                                    <td class="text-center"><button class="btn btn-secondary" onclick="removeRow(${
+                                      indexCuoi + 1
+                                    })">
+                                      <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button></td>
+                                  </tr>
+                  `);
+                });
+            /*]]>*/
+          </script>
+          <script th:src="@{js/product_admin.js}"></script>
+    </main>
+   
+</html>

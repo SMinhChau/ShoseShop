@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layouts/main_admin_layout">
+<th:block layout:fragment="titleAdmin">
+    <title>Danh sách mã khuyến mãi</title>
+</th:block>
+
+
+<main layout:fragment="content">
+    <div class="width-full-sidebar">
+        <div class="container-fluid">
+            <form class="row p-5 pt-0" th:action="@{/admin/promotions}" th:object="${promotions}" method="post">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h3 class="p-4">Promotions</h3>
+                    </div>
+                    <div class="col-sm-4 text-end row align-items-center">
+                        <div class="col">
+                            <a href="/admin/promotion/add" class="btn btn-warning btn-warning">New Promotions</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12  bg-white">
+                    <div class="row justify-content-start align-items-center">
+                        <div class="col-md-1 text-end">
+                            <button type="button" class="btn btn-outline-secondary"><i class="fa fa-sliders" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="col-md-11">
+                            <div class="input-group p-4 ps-0">
+                                <button id="btnsearch" class="btn btn-secondary"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                <input aria-describedby="btnsearch" type="text" class="form-control " placeholder="Start typing to search for promotions" aria-label="Username">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="table__product">
+                            <table class="table">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting_disabled text-center" style="width: 50px;">
+                                            #
+                                        </th>
+                                        <th class="text-center " style="width:200px; ">Code</th>
+                                        <th class="text-center " style="width:200px; ">Start Date</th>
+                                        <th class="text-center  " style="width:200px; ">Stop Date</th>
+                                        <th class="text-center " style="width:200px; ">Percentile</th>
+                                        <th class="text-center " style="width:200px; ">Max Value</th>
+                                        <th class="text-center " style="width:200px; ">Min Value</th>
+                                        <th class="text-center " style="width:150px; ">Total</th>
+                                        <th class="text-center " style="width:150px; ">Quantity</th>
+                                        <th class="text-center " style="width:150px; ">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class=" " th:each="promotion, stt:${promotions}">
+                                        <td class="align-middle text-center " th:text="${stt.index+1} "></td>
+                                        <td class="align-middle text-center ">
+                                            <h6 href="# " class="align-middle m-0 " th:text="${#strings.capitalizeWords(promotion.code)} ">10099999d</h6>
+                                        </td>
+                                        <td class="align-middle text-center " style="width: 150px; " th:text="${#dates.format(promotion.beginDate, 'dd/MM/yyyy')} " id="createdDate-customer ">
+                                            <td class="align-middle text-center " style="width: 150px; " th:text="${#dates.format(promotion.endDate, 'dd/MM/yyyy')} " id="createdDate-customer ">
+                                                <td class="align-middle text-center " th:text="${promotion.percentile} +'%'"></td>
+                                                <td class="align-middle text-center " th:text="${promotion.maxValue} "></td>
+                                                <td class="align-middle text-center " th:text="${promotion.minValue} "></td>
+                                                <td class="align-middle text-center " th:text="${promotion.totalCode} "></td>
+                                                <td class="align-middle text-center " th:text="${promotion.quantity} "></td>
+                                                <td class="align-middle text-center" th:if="${promotion.beginDate.after(#dates.createNow())}" ><a type="button" th:href="'/admin/promotion/'+ ${promotion.id}" class="btn btn-success"><i class="fa fa-pencil-square-o p-1 m-0" aria-hidden="true"></i>Edit</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+            </form>
+
+            </div>
+            <script>
+            </script>
+</main>
+
+</html>

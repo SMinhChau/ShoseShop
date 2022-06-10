@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="layouts/main_admin_layout"
+>
+  <main layout:fragment="content">
+    <div class="width-full-sidebar">
+      <div class="container-fluid">
+        <div class="row p-5 pt-0" >
+          <div class="row">
+            <div class="col-sm-8">
+              <h3 class="p-4">Order</h3>
+            </div>
+          </div>
+
+          <div class="col-md-12 bg-white row">
+            <div class="col-md-2">
+              <div class="row">
+                <h6 class="text-start">Customer phone</h6>
+              </div>
+              <div class="row p-2">
+                <div class="col-md-9 p-0">
+                  <input class="form-control" type="text" name="" id="phone">
+                </div>
+                <div class="col-md-3 p-0">
+                  <button type="button" class="btn btn-primary" id="btn-phone" onclick="searchOrder('btn-phone')">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2 offset-md-1">
+              <div class="row">
+                <h6>Customer name</h6>
+              </div>
+              <div class="row p-2">
+                  <input class="form-control" type="text" name="" id="name">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="row">
+                <h6>Status</h6>
+              </div>
+              <div class="row  p-2">
+                <select  class="form-select" id="status">
+                  <option value="Tất cả" selected>Tất cả</option>
+                  <option value="Đang xử lý">Đang xử lý</option>
+                  <option value="Đang giao hàng">Đang giao hàng</option>
+                  <option value="Giao hàng thất bại">Giao hàng thất bại</option>
+                  <option value="Đã thanh toán">Đã thanh toán</option>
+                  <option value="Đã hủy">Đã hủy</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="row">
+                <h6>From</h6>
+              </div>
+              <div class="row  p-2">
+                <input type="date" class="form-control" id="date-from">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="row">
+                <h6>To</h6>
+              </div>
+              <div class="row  p-2">
+                <div class="col-md-8">
+                  <input type="date" class="form-control" id="date-to">
+                </div>
+
+                <div class="col-md-3">
+                  <button type="button" class="btn btn-primary" id="btn-search" onclick="searchOrder('btn-search')">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <table class="table">
+              <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Created date</th>
+                <th scope="col">Customer phone</th>
+                <th scope="col">Full name</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+              </tr>
+              </thead>
+              <tbody id="table">
+              </tbody>
+            </table>
+
+            <div class="d-flex justify-content-center">
+              <nav aria-label="Page navigation example">
+                <ul class="pagination" id="pagination">
+
+                </ul>
+              </nav>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Update order status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <input type="hidden" id="order-id">
+                <select class="form-select" id="order-status" name="status">
+
+                </select>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" onclick="updateStatus()">Update status</button>
+              </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</html>

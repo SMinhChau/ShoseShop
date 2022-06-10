@@ -1,0 +1,320 @@
+<sidebars
+  class="sidebar sticky-lg-top d-flex flex-column flex-shrink-0 p-3 text-white bg-dark min-vh-100"
+  th:fragment="sidebarsFragment"
+>
+  <a
+    class="w-100 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+    href="/admin"
+  >
+    <span class="fs-4">ADMIN</span>
+  </a>
+  <hr />
+  <ul class="nav nav-pills flex-column mb-auto list-sidebar">
+    <li class="nav-item">
+      <a
+        aria-current="page"
+        class="nav-link text-white"
+        href="/admin"
+        id="admin"
+      >
+        <i aria-hidden="true" class="fa fa-home"></i> Home
+      </a>
+    </li>
+    <li class="mb-1">
+      <a
+        aria-expanded="false"
+        class="nav-link text-white active"
+        data-bs-target="#dashboard-collapse"
+        data-bs-toggle="collapse"
+        href="#"
+      >
+        <div class="d-flex justify-content-between">
+          <div>
+            <i aria-hidden="true" class="fa fa-database"></i>
+            <span>Product</span>
+          </div>
+          <i aria-hidden="true" class="fa fa-chevron-down"></i>
+        </div>
+      </a>
+      <div class="collapse" id="dashboard-collapse">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li class="p-2 ms-3 nav-link active" id="product">
+            <a class="link-light rounded nav-link p-0" href="/admin/product"
+              ><i aria-hidden="true" class="fa fa-cube min-w-icon"></i
+              >Product</a
+            >
+          </li>
+          <li class="p-2 ms-3 nav-link" id="products">
+            <a class="link-light rounded nav-link p-0" href="/admin/products"
+              ><i aria-hidden="true" class="fa fa-cubes min-w-icon"></i>Product
+              List</a
+            >
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li class="mb-1">
+      <a
+        aria-expanded="false"
+        class="nav-link text-white active"
+        data-bs-target="#dashboard-collapse11"
+        data-bs-toggle="collapse"
+        href="#"
+      >
+        <div class="d-flex justify-content-between">
+          <div>
+            <i aria-hidden="true" class="fa fa-database"></i>
+            <span>Brand</span>
+          </div>
+          <i aria-hidden="true" class="fa fa-chevron-down"></i>
+        </div>
+      </a>
+      <div class="collapse" id="dashboard-collapse11">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li class="p-2 ms-3 nav-link">
+            <a class="link-light rounded nav-link p-0" href="/admin/brand/add"
+              ><i aria-hidden="true" class="fa fa-th-large min-w-icon"></i>Brand
+            </a>
+          </li>
+          <li class="p-2 ms-3 nav-link">
+            <a class="link-light rounded nav-link p-0" href="/admin/brands"
+              ><i aria-hidden="true" class="fa fa-th-list min-w-icon"></i>Brand
+              List</a
+            >
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li class="mb-1">
+      <a
+        aria-expanded="false"
+        class="nav-link text-white active"
+        data-bs-target="#dashboard-collapse2"
+        data-bs-toggle="collapse"
+        href="#"
+      >
+        <div class="d-flex justify-content-between">
+          <div>
+            <i aria-hidden="true" class="fa fa-database"></i>
+            <span>Product-Line</span>
+          </div>
+          <i aria-hidden="true" class="fa fa-chevron-down"></i>
+        </div>
+      </a>
+      <div class="collapse" id="dashboard-collapse2">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li class="p-2 ms-3 nav-link">
+            <a
+              class="link-light rounded nav-link p-0"
+              href="/admin/product-line/add"
+              ><i aria-hidden="true" class="fa fa-th-large min-w-icon"></i
+              >Product-Line
+            </a>
+          </li>
+          <li class="p-2 ms-3 nav-link">
+            <a
+              class="link-light rounded nav-link p-0"
+              href="/admin/product-lines"
+              ><i aria-hidden="true" class="fa fa-th-list min-w-icon"></i
+              >Product-Line List</a
+            >
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li class="mb-1">
+      <a
+        aria-expanded="false"
+        class="nav-link text-white active"
+        data-bs-target="#dashboard-collapse3"
+        data-bs-toggle="collapse"
+        href="#"
+      >
+        <div class="d-flex justify-content-between">
+          <div>
+            <i aria-hidden="true" class="fa fa-database"></i>
+            <span>Caterory</span>
+          </div>
+          <i aria-hidden="true" class="fa fa-chevron-down"></i>
+        </div>
+      </a>
+      <div class="collapse" id="dashboard-collapse3">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li class="p-2 ms-3 nav-link">
+            <a
+              class="link-light rounded nav-link p-0"
+              href="/admin/category/add"
+              ><i aria-hidden="true" class="fa fa-th-large min-w-icon"></i
+              >Caterory
+            </a>
+          </li>
+          <li class="p-2 ms-3 nav-link">
+            <a class="link-light rounded nav-link p-0" href="/admin/categories"
+              ><i aria-hidden="true" class="fa fa-th-list min-w-icon"></i
+              >Caterory List</a
+            >
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li class="mb-1">
+      <a
+        aria-expanded="false"
+        class="nav-link text-white active"
+        data-bs-target="#dashboard-collapse4"
+        data-bs-toggle="collapse"
+        href="#"
+      >
+        <div class="d-flex justify-content-between">
+          <div>
+            <i aria-hidden="true" class="fa fa-user-o"></i>
+            <span>Customers</span>
+          </div>
+          <i aria-hidden="true" class="fa fa-chevron-down"></i>
+        </div>
+      </a>
+      <div class="collapse" id="dashboard-collapse4">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <!-- <li class="p-2 ms-3 nav-link">
+    <a href="/admin/categories" class="link-light rounded nav-link p-0"><i class="fa fa-th-large min-w-icon" aria-hidden="true"></i
+>Customers
+</a>
+</li> -->
+          <li class="p-2 ms-3 nav-link">
+            <a class="link-light rounded nav-link p-0" href="/admin/customers"
+              ><i aria-hidden="true" class="fa fa-th-list min-w-icon"></i
+              >Customers List</a
+            >
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li class="mb-1">
+      <a
+        aria-expanded="false"
+        class="nav-link text-white active"
+        data-bs-target="#dashboard-collapse9"
+        data-bs-toggle="collapse"
+        href="#"
+      >
+        <div class="d-flex justify-content-between">
+          <div>
+            <i class="fa fa-certificate" aria-hidden="true"></i>
+            <span>Promotion</span>
+          </div>
+          <i aria-hidden="true" class="fa fa-chevron-down"></i>
+        </div>
+      </a>
+      <div class="collapse" id="dashboard-collapse9">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li class="p-2 ms-3 nav-link">
+            <a
+              class="link-light rounded nav-link p-0"
+              href="/admin/promotion/add"
+              ><i aria-hidden="true" class="fa fa-th-large min-w-icon"></i
+              >Promotion
+            </a>
+          </li>
+          <li class="p-2 ms-3 nav-link">
+            <a class="link-light rounded nav-link p-0" href="/admin/promotions"
+              ><i aria-hidden="true" class="fa fa-th-list min-w-icon"></i
+              >Promotion List</a
+            >
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li>
+      <a class="nav-link text-white" href="/admin/order">
+        <i aria-hidden="true" class="fa fa-table"></i> Order
+      </a>
+    </li>
+    <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+      <li class="mb-1">
+        <a
+          aria-expanded="false"
+          class="nav-link text-white active"
+          data-bs-target="#dashboard-collapse6"
+          data-bs-toggle="collapse"
+          href="#"
+        >
+          <div class="d-flex justify-content-between">
+            <div>
+              <i class="fa fa-user-circle" aria-hidden="true"></i>
+              <span>Users</span>
+            </div>
+            <i aria-hidden="true" class="fa fa-chevron-down"></i>
+          </div>
+        </a>
+        <div class="collapse" id="dashboard-collapse6">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li class="p-2 ms-3 nav-link">
+              <a class="link-light rounded nav-link p-0" href="/admin/user/add"
+                ><i aria-hidden="true" class="fa fa-th-large min-w-icon"></i
+                >User
+              </a>
+            </li>
+            <li class="p-2 ms-3 nav-link">
+              <a class="link-light rounded nav-link p-0" href="/admin/users"
+                ><i aria-hidden="true" class="fa fa-th-list min-w-icon"></i>User
+                List</a
+              >
+            </li>
+          </ul>
+        </div>
+      </li>
+    </th:block>
+  </ul>
+  <hr />
+  <div class="dropdown">
+    <a
+      aria-expanded="false"
+      class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+      data-bs-toggle="dropdown"
+      href="#"
+      id="dropdownUser1"
+    >
+      <img
+        alt=""
+        class="rounded-circle me-2"
+        height="32"
+        th:src="@{/images/web/admin-icon.jpg}"
+        width="32"
+      />
+      <strong>
+        <p
+          th:each="authority : ${#authentication.getAuthorities()}"
+          th:if="${authority.getAuthority().startsWith('ROLE_')}"
+          th:text="${authority.getAuthority().replaceFirst('ROLE_', '')}"
+        ></p
+      ></strong>
+    </a>
+    <ul
+      aria-labelledby="dropdownUser1"
+      class="dropdown-menu dropdown-menu-dark text-small shadow"
+    >
+      <li><a class="dropdown-item" href="/admin/logout">Sign out</a></li>
+    </ul>
+  </div>
+  <script>
+    const locationHref = window.location.pathname;
+    $(".nav-link").removeClass("active");
+    if (!locationHref.split("/")[2]) {
+      $(`#admin`).addClass("active");
+    } else {
+      $(`#${locationHref.split("/")[2]}`).addClass("active");
+      $(`#${locationHref.split("/")[2]}`)
+        .parent()
+        .parent()
+        .parent()
+        .children()
+        .first()
+        .addClass("active collapsed")
+        .attr("aria-expanded", true);
+      $(`#${locationHref.split("/")[2]}`)
+        .parent()
+        .parent()
+        .addClass("show");
+    }
+  </script>
+</sidebars>

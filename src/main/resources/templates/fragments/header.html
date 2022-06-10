@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <header th:fragment="headerFragment">
+    <div class="container-fluid">
+      <nav class="row align-items-center">
+        <div class="col-4 d-flex justify-content-center">
+          <img
+            src="https://giaygiare.vn/upload/giaodien/logo-new-year.png"
+            class="img-responsive"
+          />
+        </div>
+        <form class="col-4" th:action="@{/product/search}" method="get">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              aria-describedby="basic-addon1"
+              placeholder="Nhập gợi ý từ khoá"
+              name="key"
+            />
+            <button
+              type="submit"
+              id="basic-addon1"
+              class="btn btn-warning input-group-text fa fa-search"
+              value="fa fa-search"
+            ></button>
+          </div>
+        </form>
+        <div class="col-2 d-flex align-items-center justify-content-center">
+          <i class="fa fa-user-circle fs-2" aria-hidden="true"></i>
+          <div sec:authorize="!isAuthenticated()" class="ms-3">
+            <a href="/user/register">Đăng ký</a><br /><a href="/user/login"
+              >Đăng nhập</a
+            >
+          </div>
+          <div sec:authorize="isAuthenticated()" class="ms-3">
+            <h5
+              type="button"
+              class="dropdown-toggle"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              th:text="${session.fullName}"
+            ></h5>
+            <ul sec:authorize="hasRole('ROLE_CUSTOMER')" class="dropdown-menu mt-4" style="width: 300px">
+              <a
+                      th:href="@{/user/edit-account}"
+                      class="btn btn-primary position-absolute top-0 end-0 m-1"
+              >
+                Edit profile
+              </a>
+              <li class="dropdown-item disabled pt-4 text-primary">
+                <img
+                        th:src="@{/images/web/mem-phone.svg}"
+                        alt=""
+                        class="icon"
+                />
+                <span th:text="${session.phone}"></span>
+              </li>
+              <li class="dropdown-item disabled text-primary">
+                <img th:src="@{/images/web/mem-mail.svg}" alt="" class="icon" />
+                <span th:text="${session.email}"></span>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a href="/user/orders" class="dropdown-item">
+                  <img
+                    th:src="@{/images/web/mem-cart.svg}"
+                    alt="/user/orders"
+                    class="icon"
+                  />
+                  Danh sách đơn hàng
+                </a>
+              </li>
+              <li>
+                <a href="" class="dropdown-item">
+                  <img
+                    th:src="@{/images/web/mem-gift.svg}
+                    "
+                    alt=""
+                    class="icon"
+                  />
+                  Hệ thống tích điểm
+                </a>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a th:href="@{/user/logout}" class="dropdown-item">
+                  <img
+                    th:src="@{/images/web/mem-logout.svg}
+                    "
+                    alt=""
+                    class="icon"
+                  />
+                  Đăng xuất
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <a
+          class="col-2"
+          data-bs-toggle="modal"
+          data-bs-target="#cartModal"
+          onclick="getDataCart()"
+        >
+          <div
+            class="bg-warning d-flex flex-column justify-content-center align-items-center w-100px h-80px"
+          >
+            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+            <b
+              class="quantityItemCart"
+              th:text="${session.cart!=null?session.cart.totalQuantity:'0'} + ' sản phẩm'"
+            ></b>
+          </div>
+        </a>
+      </nav>
+    </div>
+  </header>
+</html>

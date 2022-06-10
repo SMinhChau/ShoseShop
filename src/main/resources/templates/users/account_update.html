@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layouts/main_layout">
+
+<th:block layout:fragment="title">
+    <title>Cập nhật thông tin tài khoản</title>
+</th:block>
+
+
+<th:block layout:fragment="css">
+        <link rel="stylesheet" th:href="@{/css/account_update.css}">
+</th:block>
+
+    <main layout:fragment="content">
+        <div class="container">
+            <nav aria-label="breadcrumb" class="parent_breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Cập nhật thông tin tài khoản</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="taikhoan">
+            <div class="login">
+                <form  th:action="@{/user/edit-account}" method="post" enctype="multipart/form-data" th:object="${user}">
+                    <h4>Cập nhật thông tin tài khoản</h4>
+                    <div class="rowmem chia2">
+                        <label for="sTen">Họ tên<span class="required">*</span></label>
+                        <input th:field="*{fullName}" type="text" id="sTen"  value="" required>
+                        <div class="bind alert alert-warning" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+                    </div>
+                    <div class="rowmem chia2">
+                        <label for="sDienthoai">Điện thoại<span class="required">*</span></label>
+                        <input type="text" th:value="${user.phone}" disabled>
+                        <input th:field="*{phone}" type="hidden" id="sDienthoai" name="sDienthoai" >
+                    </div>
+                    <div class="rowmem chia2">
+                        <label for="password">Mật khẩu mới<span class="required">*</span><span style="font-weight:100; margin-left:10px; font-size:14px">(Hiển thị trong phần tài khoản, Feedback &amp; đánh giá sản phẩm)</span></label>
+                        <input th:field="*{password}" type="password" id="password"  value="" >
+                        <div class="bind alert alert-warning pr-1" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                    </div>
+                    <div class="rowmem chia2">
+                        <label for="sEmail">Địa chỉ Email<span class="required">*</span></label>
+                        <input th:field="*{email}" type="email" id="sEmail" name="sEmail" value="" required>
+                        <div class="bind alert alert-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="rowmem chia2">
+                        <label for="password-re">Nhập lại mật khẩu mới<span style="font-weight:100; margin-left:10px; font-size:14px">(Không cần nhập nếu bạn muốn dùng mật khẩu cũ)</span></label>
+                        <input type="password" id="password-re" class="password-strength" name="sPassword">
+                        <span id="strength_message"></span>
+                    </div>
+                    <div class="rowmem chia2">
+                        <label for="xnpassword">Mật khẩu xác nhận</label>
+                        <input th:field="*{rePassword}" type="password" id="xnpassword" name="sPasswordxn" required>
+                    </div>
+                    <div class="clear"></div>
+                    <button class="btn btn-primary" onclick="checkPass()" type="button">Cập nhật</button>
+                    <input  type="submit" hidden value="Cập nhật" name="btnLogin" id="submit">
+                </form>
+            </div>
+        </div>
+        <th:block th:utext="${message_edit_account}">
+        </th:block>
+
+        <script>
+            function checkPass(){
+                let pass = $('#password').val();
+                let rePass= $('#password-re').val();
+                if (pass == rePass){
+                    $('#submit').click();
+                }else{
+                    alert("Nhập lại mật khẩu mới không trùng khớp!");
+                }
+            }
+        </script>
+    </main>
+</html>

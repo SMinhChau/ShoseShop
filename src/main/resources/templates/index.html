@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="layouts/main_layout"
+>
+  <th:block layout:fragment="title">
+    <title>Trang chủ</title>
+  </th:block>
+
+  <main layout:fragment="content">
+    <div
+      id="carouselExampleControls"
+      class="carousel slide"
+      data-bs-ride="carousel"
+    >
+      <div class="carousel-inner">
+        <div
+          th:each="item,status : ${slideHomes}"
+          th:classappend="${status.first?'carousel-item active':'carousel-item'}"
+        >
+          <img
+            th:src="@{'/images/slides/'+${item.image}}"
+            class="d-block w-100"
+            alt="..."
+          />
+        </div>
+      </div>
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleControls"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleControls"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+    <div class="BGI__banchay"></div>
+    <div class="container text-center my-3 swiper" id="swiper">
+      <div class="row mx-auto my-auto justify-content-center">
+        <div id="recipeCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner" role="listbox">
+            <div
+              th:each="item,status: ${productBestSells}"
+              th:classappend="${status.first?'carousel-item active':'carousel-item'}"
+            >
+              <div class="col-md-3">
+                <a th:href="'/product/'+${item.id}" class="card">
+                  <div class="card__ribbon">
+                    <span th:text="${item.status==false}?'Hết hàng':'đang hot'"
+                      >đang hot</span
+                    >
+                  </div>
+                  <div class="card__img">
+                    <img
+                      th:src="'/images/products/'+${item.avatar}"
+                      class="card-img-top"
+                    />
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title" th:text="${item.name}"></h5>
+                    <p class="card-text">
+                      <span
+                        class="text-warning fs-5"
+                        th:text="${#numbers.formatDecimal(item.promotionPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                      ></span>
+                      <span
+                        th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                        class="text-secondary fs-6 text-decoration-line-through"
+                      ></span>
+                    </p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <a
+            class="carousel-control-prev bg-transparent w-aut"
+            href="#recipeCarousel"
+            role="button"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          </a>
+          <a
+            class="carousel-control-next bg-transparent w-aut"
+            href="#recipeCarousel"
+            role="button"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <th:block th:each="item : ${brands}">
+      <div class="container my-3 titlehome p-0">
+        <div class="w-25 d-flex">
+          <i></i> <span></span>
+          <h2>
+            <a
+              th:href="@{'/product/brand/'+${item.id}}"
+              class="text-warning"
+              th:text="'Giày ' + ${item.name}"
+            >
+              Adidas</a
+            >
+          </h2>
+        </div>
+        <div class="w-75 d-flex align-items-center justify-content-end">
+          <div class="titlehome__menuchild">
+            <a
+              class="p-3"
+              th:each="item1,status1 : ${item.productLines}"
+              th:if="${status1.index}<7"
+              th:text="${item1.name}==${item.name}?'':${item1.name}"
+              th:href="@{'/product/product-line/'+${item1.id}}"
+              >X9000L4</a
+            >
+            <a
+              th:href="@{'/product/brand/'+${item.id}}"
+              class="titlehome__viewall"
+              >Xem tất cả</a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row list__card">
+          <div
+            class="col-md-3 col-sm-4"
+            th:each="item2,status2:${item.products}"
+            th:if="${status2.index}<8"
+          >
+            <a th:href="'/product/'+${item2.id}" class="card">
+              <div class="card__ribbon">
+                <span th:text="${item2.status==false}?'Hết hàng':'đang hot'"
+                  >đang hot</span
+                >
+              </div>
+              <div class="card__img">
+                <img
+                  th:src="'/images/products/' + ${item2.avatar}"
+                  class="card-img-top"
+                />
+              </div>
+              <div class="card-body">
+                <h5 class="card-title" th:text="${item2.name}">
+                  Adidas ultra boost 20 consortium dash grey 1:1
+                </h5>
+
+                <p class="card-text">
+                  <span
+                    class="text-warning fs-5"
+                    th:text="${#numbers.formatDecimal(item2.promotionPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                  ></span>
+                  <span
+                    th:text="${#numbers.formatDecimal(item2.price, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                    class="text-secondary fs-6 text-decoration-line-through"
+                  ></span>
+                </p>
+              </div>
+            </a>
+          </div>
+        </div>
+        <a th:href="@{'/product/brand/'+${item.id}}" class="next-category">
+          <th:block th:text="'Xem thêm giày ' +  ${item.name}"></th:block>
+          <i class="fa fa-arrow-circle-o-right fs-4 ms-2" aria-hidden="true"></i
+        ></a>
+      </div>
+    </th:block>
+
+    <th:block th:utext="${message_order}"> </th:block>
+    <th:block th:utext="${message_login}"> </th:block>
+    <th:block th:utext="${message_login_index}"> </th:block>
+    <th:block th:utext="${message_forget_password}"> </th:block>
+
+  </main>
+  <th:block layout:fragment="js">
+    <script>
+      let items = document.querySelectorAll("#swiper .carousel .carousel-item");
+
+      items.forEach((el) => {
+        const minPerSlide = 4;
+        let next = el.nextElementSibling;
+        for (var i = 1; i < minPerSlide; i++) {
+          if (!next) {
+            // wrap carousel by using first child
+            next = items[0];
+          }
+          let cloneChild = next.cloneNode(true);
+          el.appendChild(cloneChild.children[0]);
+          next = next.nextElementSibling;
+        }
+      });
+    </script>
+  </th:block>
+</html>

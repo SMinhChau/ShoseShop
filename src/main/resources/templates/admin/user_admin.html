@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="layouts/main_admin_layout"
+>
+<th:block layout:fragment="titleAdmin">
+  <title>Danh sách tài khoản</title>
+</th:block>
+  <main layout:fragment="content">
+    <div class="width-full-sidebar">
+      <div class="container-fluid">
+        <div class="row p-2 pt-1" >
+          <div class="row">
+            <div class="col-sm-8">
+              <h3 class="p-4">Users</h3>
+            </div>
+            <div class="col-sm-4 text-end p-3">
+              <a href="/admin/user/add" class="btn btn-success">Add user</a>
+            </div>
+          </div>
+
+          <div class="col-md-12 bg-white row">
+            <div class="col-md-3 offset-md-1">
+              <div class="row">
+                <h6 class="text-start">User phone</h6>
+              </div>
+              <div class="row p-2">
+                <div class="col-md-9 p-0">
+                  <input th:value="${phone}" class="form-control" type="number" name="" id="search">
+                </div>
+                <div class="col-md-3 p-0">
+                  <button type="button" class="btn btn-primary" onclick="searchPhone()">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <table class="table">
+              <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Email</th>
+                <th scope="col">Full name</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="item,status : ${users}" >
+                <th scope="row">[[${status.index+1}]]</th>
+                <td>[[${item.phone}]]</td>
+                <td>[[${item.email}]]</td>
+                <td>[[${item.fullName}]]</td>
+                <td th:text="${item.status==true?'Đang hoạt động':'Khóa tài khoản'}"></td>
+                <td>
+                  <a class="btn btn-success" th:href="@{'/admin/user/edit/' +${item.id}}">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function searchPhone(){
+        let phone = $('#search').val();
+        window.location.href = "/admin/users?phone="+phone;
+      }
+
+    </script>
+  </main>
+</html>

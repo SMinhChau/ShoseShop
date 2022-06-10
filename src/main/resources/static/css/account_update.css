@@ -1,0 +1,179 @@
+* {
+    box-sizing: border-box;
+}
+.taikhoan {
+    margin: 40px auto;
+    overflow: hidden;
+    position: relative;
+    min-height: 400px;
+    width: 90%;
+}
+div {
+    display: block;
+}
+.rowmem {
+    float: left;
+    width: 48%;
+    height: 150px;
+    margin-right: 2%;
+    position: relative;
+}
+.clear {
+    clear: both;
+    height: 1px;
+}
+.taikhoan label .required {
+    color: red;
+    margin-left: 3px;
+}
+element.style {
+    font-weight: 100;
+    margin-left: 10px;
+    font-size: 14px;
+}
+html {
+    -webkit-text-size-adjust: none;
+    height: 100%;
+}
+#profile-container span {
+    font-style: italic;
+    color: #888;
+}
+#profile-container img {
+    width: 100px;
+    height: 100px;
+    vertical-align: middle;
+    margin-right: 10px;
+    border-radius: 100%;
+    border: 2px solid #ccc;
+    padding: 2px;
+}
+#profileImage {
+    cursor: pointer;
+}
+#profile-container {
+    border-radius: 50%;
+    margin-bottom: 30px;
+}
+img:not(.initial) {
+    transition: opacity 2s;
+    transition-property: opacity;
+    transition-duration: 2s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+}
+#imageUpload {
+    margin-bottom: 30px;
+}
+input[type="file" i] {
+    appearance: none;
+    background-color: initial;
+    cursor: default;
+    align-items: baseline;
+    color: inherit;
+    text-overflow: ellipsis;
+    white-space: pre;
+    text-align: start !important;
+    padding: initial;
+    border: initial;
+    overflow: hidden !important;
+}
+.clear {
+    clear: both;
+    height: 1px;
+}
+img {
+    max-width: 100%;
+}
+.taikhoan input[type="submit"] {
+    padding: 9px;
+    background-color: #333;
+    color: #fff;
+    outline: 0;
+    border: 0;
+    -webkit-appearance: none;
+    border-radius: 3px;
+    box-sizing: border-box;
+    font-weight: 400;
+    width: 250px;
+    text-align: center;
+    cursor: pointer;
+}
+body {
+    font-family: 'Roboto Condensed',sans-serif;
+    background: #fff;
+    font-size: 16px;
+    color: #333;
+    line-height: 20px;
+    min-height: 700px;
+    font-weight: 300;
+}
+h4 {
+    display: block;
+    margin-block-start: 1.33em;
+    margin-block-end: 1.33em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+.taikhoan h4 {
+    text-align: center;
+    margin: 20px 0 40px;
+    font-size: 24px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+.taikhoan label {
+    margin-bottom: 10px;
+    display: block;
+    font-size: 18px;
+    font-weight: 400;
+}
+label {
+    cursor: default;
+}
+.taikhoan input[type="text"], .taikhoan input[type="password"], .taikhoan input[type="phone"], .taikhoan input[type="email"] {
+    padding: 9px;
+    background-color: #fff;
+    color: #444;
+    outline: 0;
+    border: 0;
+    -webkit-appearance: none;
+    border-radius: 3px;
+    box-sizing: border-box;
+    font-weight: 400;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    width: 96%;
+    margin-bottom: 20px;
+}
+
+.bind{
+    width: 96%;
+    padding: 10px;
+}
+
+
+input {
+    writing-mode: horizontal-tb !important;
+    text-rendering: auto;
+    color: -internal-light-dark(black, white);
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: start;
+    appearance: auto;
+    -webkit-rtl-ordering: logical;
+    cursor: text;
+    background-color: -internal-light-dark(rgb(255, 255, 255), rgb(59, 59, 59));
+    margin: 0em;
+    padding: 1px 2px;
+    border-width: 2px;
+    border-style: inset;
+    border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+    border-image: initial;
+}

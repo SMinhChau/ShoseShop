@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="layouts/main_admin_layout"
+>
+  <th:block layout:fragment="titleAdmin">
+    <title>Dashboard</title>
+  </th:block>
+  <main layout:fragment="content">
+    <div class="width-full-sidebar">
+      <div class="container-fluid">
+        <div class="row p-5 pt-0">
+          <h3 class="p-3">Dashboard</h3>
+          <div class="col-md-4">
+            <div class="p-3 bg-white rounded-3">
+              <h5 class="d-flex justify-content-between align-items-center">
+                <span
+                  ></i>Doanh thu
+                  (năm): </span
+                ><strong th:text="${inYear}"></strong>
+              </h5>
+              <div class="d-flex justify-content-between mt-3">
+                <h4
+                  class="align-self-end"
+                  th:text="${#numbers.formatDecimal(totalMoneyInYear, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                >
+                  300000 đ
+                </h4>
+                <div class="d-flex flex-column align-items-end">
+                  <div>
+                    <i
+                      class="fa"
+                      th:classappend="${percentYear < 0} ?'fa-chevron-down text-danger': 'fa-chevron-up text-success'"
+                      aria-hidden="true"
+                    ></i>
+                    <span
+                      th:class="${percentYear < 0} ?'text-danger': 'text-success'"
+                      th:text="${percentYear}+' %'"
+                      >30%</span
+                    >
+                  </div>
+                  <span class="text-secondary"
+                    >So sánh với năm
+                    <strong th:text="${beforeYear}">2021</strong></span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="p-3 bg-white rounded-3">
+              <h5 class="d-flex justify-content-between">
+                <span>Doanh thu (tháng): </span
+                ><strong th:text="${inMonth}"></strong>
+              </h5>
+              <div class="d-flex justify-content-between  mt-3">
+                <h4
+                  class="align-self-end"
+                  th:text="${#numbers.formatDecimal(totalMoneyInMonth, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                >
+                  300000 đ
+                </h4>
+                <div class="d-flex flex-column align-items-end">
+                  <div>
+                    <i
+                      class="fa"
+                      th:classappend="${percentMonth < 0} ?'fa-chevron-down text-danger': 'fa-chevron-up text-success'"
+                      aria-hidden="true"
+                    ></i>
+                    <span
+                      th:class="${percentMonth < 0}  ?'text-danger': 'text-success'"
+                      th:text="${percentMonth}+' %'"
+                      >30%</span
+                    >
+                  </div>
+                  <span class="text-secondary"
+                    >So sánh với tháng
+                    <strong th:text="${beforeMonth}">2021</strong></span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-white rounded-3">
+              <h5 class="d-flex justify-content-between">
+                <span>Doanh thu (ngày): </span
+                ><strong th:text="${inDay}"></strong>
+              </h5>
+              <div class="d-flex justify-content-between  mt-3">
+                <h4
+                  class="align-self-end"
+                  th:text="${#numbers.formatDecimal(totalMoneyInDay, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                >
+                  300000 đ
+                </h4>
+                <div class="d-flex flex-column align-items-end">
+                  <div>
+                    <i
+                      class="fa"
+                      th:classappend="${percentDay < 0} ?'fa-chevron-down text-danger': 'fa-chevron-up text-success'"
+                      aria-hidden="true"
+                    ></i>
+                    <span
+                      th:class="${percentDay < 0}  ?'text-danger': 'text-success'"
+                      th:text="${percentDay}+' %'"
+                      >30%</span
+                    >
+                  </div>
+                  <span class="text-secondary"
+                    >So sánh với ngày
+                    <strong th:text="${beforeDay}">10</strong></span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 mt-5">
+            <div class="row" style="height: 450px">
+              <div class="col-md-3">
+                <div class="bg-white p-3 rounded-3 h-100">
+                  <h4>Sản phẩm</h4>
+                  <div
+                    class="rounded-3 text-white d-flex justify-content-center align-items-center fs-3 fw-bold"
+                    style="height: 80px; background-color: #20948b"
+                    th:text="${totalQuantityInMonth}"
+                  >
+                    150
+                  </div>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th colspan="1">#</th>
+                        <th colspan="2">Tên sản phẩm</th>
+                        <th
+                          colspan="1"
+                          class="text-end"
+                          style="width: 50px"
+                          title="Số lượng"
+                        >
+                          SL
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="" th:each="pro, stt: ${productsQuantity}">
+                        <td th:text="${stt.index + 1}"></td>
+                        <td colspan="2">
+                          <span
+                            class="threedot"
+                            th:text="${productsName.get(stt.index)}"
+                            >Giày adidas 123</span
+                          >
+                        </td>
+                        <td colspan="1" class="text-end" th:text="${pro}"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col-md-9">
+                <div class="bg-white p-3 rounded-3 h-100">
+                  <h2 class="text-center">
+                    Thống kê số lượng sản phẩm trong tháng
+                    <span th:text="${inMonth}"></span>
+                  </h2>
+                  <div
+                    id="chartContainer"
+                    style="height: 400px; width: 100%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://canvasjs.com/assets/script/jquery-ui.1.11.2.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+    <script th:inline="javascript">
+       /*<![CDATA[*/
+        var soLuongInThang = /*[[${soLuongInThang}]]*/ ;
+        var thang = /*[[${thang}]]*/ ;
+        var arrBieudo = []
+        thang.forEach((value, index) => {
+          arrBieudo.push({label: `Ngày ${value}`, y: soLuongInThang[index]})
+        })
+        // console.log(thang)
+        // console.log(soLuongInThang)
+        console.log(arrBieudo)
+
+        /*]]>*/
+      window.onload = function () {
+        var options = {
+          axisY: {
+            includeZero: true,
+            title: 'Số lượng sản phẩm'
+          },
+          data: [
+            {
+              type: "column",
+              yValueFormatString: "#,###",
+              indexLabel: "{y}",
+              color: "#20948b",
+              dataPoints: [...arrBieudo]
+            },
+          ],
+        };
+        $("#chartContainer").CanvasJSChart(options);
+        // function updateChart() {
+        //   var performance, deltaY, yVal;
+        //   var dps = options.data[0].dataPoints;
+        //   for (var i = 0; i < dps.length; i++) {
+        //     deltaY = Math.round(2 + Math.random() * (-2 - 2));
+        //     yVal = deltaY + dps[i].y > 0 ? dps[i].y + deltaY : 0;
+        //     dps[i].y = yVal;
+        //   }
+        //   options.data[0].dataPoints = dps;
+        //   $("#chartContainer").CanvasJSChart().render();
+        // }
+        // updateChart();
+        $("#chartContainer").CanvasJSChart().render();
+
+      };
+    </script>
+  </main>
+</html>

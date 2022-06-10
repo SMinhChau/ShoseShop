@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="layouts/main_layout"
+>
+  <th:block layout:fragment="title">
+    <title>Danh sách đơn hàng</title>
+  </th:block>
+  <main layout:fragment="content">
+    <div class="container">
+      <nav aria-label="breadcrumb" class="parent_breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+          <li class="breadcrumb-item">
+            <a href="/user/orders">Danh sách đơn hàng</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            Chi tiết đơn hàng
+          </li>
+        </ol>
+      </nav>
+    </div>
+    <div class="container">
+      <div class="text-end">
+        <input
+          type="button"
+          id="btnExport"
+          value="Xuất PDF"
+          class="btn btn-success"
+        />
+      </div>
+      <div class="row" id="tblCustomers">
+        <h3 class="text-center">
+          Chi tiết đơn hàng:
+          <span
+            class="fw-bold"
+            th:text="${ordersDetail.get(0).order.generateCode}"
+          ></span>
+        </h3>
+        <div class="d-flex mt-3">
+          <div class="col-md-4">
+            <ul>
+              <li>
+                Tên khách hàng:
+                <span
+                  class="fw-bold"
+                  th:text="${ordersDetail.get(0).order.customer.fullName}"
+                ></span>
+              </li>
+              <li>
+                Ngày mua:
+                <span
+                  class="fw-bold"
+                  th:text="${#dates.format(ordersDetail.get(0).order.createdDate, 'HH:mm | dd-MM-yyyy')}"
+                ></span>
+              </li>
+              <li>
+                Tình trạng:
+                <span
+                  class="fw-bold"
+                  th:text="${ordersDetail.get(0).order.status}"
+                ></span>
+              </li>
+              <li>
+                Thanh toán:
+                <span class="fw-bold">COD ( Khi nhận hàng )</span>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-8">
+            <ul>
+              <li>
+                Số điện thoại:
+                <span
+                  class="fw-bold"
+                  th:text="${ordersDetail.get(0).order.customer.phone}"
+                ></span>
+              </li>
+              <li>
+                Email :
+                <span
+                  class="fw-bold"
+                  th:text="${ordersDetail.get(0).order.customer.email}"
+                ></span>
+              </li>
+              <li>
+                Địa chỉ giao hàng:
+                <span
+                  class="fw-bold"
+                  th:text="${ordersDetail.get(0).order.shipAddress.detail + ', ' + ordersDetail.get(0).order.shipAddress.address.ward+ ', ' + ordersDetail.get(0).order.shipAddress.address.district+ ', ' + ordersDetail.get(0).order.shipAddress.address.city}"
+                ></span>
+              </li>
+              <li>
+                Ghi chú:
+                <span
+                  class="fw-bold"
+                  th:text="${ordersDetail.get(0).order.note}"
+                ></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <table class="table table-hover mt-3 mb-lg-5">
+          <thead>
+            <tr class="table-secondary">
+              <th scope="col" class="text-center">STT</th>
+              <th scope="col"></th>
+              <th scope="col">Sản phẩm</th>
+              <th scope="col" class="text-center">Size</th>
+              <th scope="col" class="text-center">Đơn giá</th>
+              <th scope="col" class="text-center">Số lượng</th>
+              <th scope="col" class="text-end">Tổng</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="ordersDetail, stt: ${ordersDetail}">
+              <th
+                scope="row"
+                class="align-middle text-center"
+                th:text="${stt.index + 1}"
+              >
+                1
+              </th>
+              <td class="align-middle text-center">
+                <img
+                  height="70"
+                  width="70"
+                  th:src="@{'/images/products/'+${ordersDetail.productSize.product.avatar}}"
+                />
+              </td>
+              <td class="align-middle">
+                <a
+                  th:href="'/product/'+${ordersDetail.productSize.product.id}"
+                  class="text-primary"
+                  th:text="${ordersDetail.productSize.product.name}"
+                  >Adidas X9000L4 Core Black / Signal Orange</a
+                >
+              </td>
+              <td class="align-middle text-center">
+                <span
+                  class="fw-bold"
+                  th:text="${ordersDetail.productSize.size.name}"
+                  >1</span
+                >
+              </td>
+              <td class="align-middle text-center">
+                <span
+                  class="fw-bold"
+                  th:text="${#numbers.formatDecimal(ordersDetail.productSize.product.promotionPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                  >1</span
+                >
+              </td>
+              <td class="align-middle text-center">
+                <span class="fw-bold" th:text="x+${ordersDetail.quantity}"
+                  >1</span
+                >
+              </td>
+              <td class="align-middle text-end">
+                <span
+                  class="text-danger fs-6 fw-bold"
+                  th:text="${#numbers.formatDecimal(ordersDetail.price*ordersDetail.quantity, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                  >1</span
+                >
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="">
+              <td
+                colspan="6"
+                class="border-white fw-bold fs-5 text-black text-end"
+              >
+                Tổng đơn hàng:
+              </td>
+              <td
+                class="fw-bold fs-5 text-danger text-end"
+                th:text="${#numbers.formatDecimal(ordersDetail.get(0).order.calculateTotal(), 0, 'COMMA', 0, 'POINT')} + ' đ'"
+              ></td>
+            </tr>
+            <tr class="">
+              <td
+                colspan="6"
+                class="border-white fw-bold fs-5 text-black text-end"
+              >
+                Giảm giá:
+              </td>
+              <td
+                class="fw-bold fs-5 text-danger text-end"
+                th:text="'-'+${#numbers.formatDecimal(ordersDetail.get(0).order.calculateDiscount(), 0, 'COMMA', 0, 'POINT')} + ' đ'"
+              >
+                ???
+              </td>
+            </tr>
+            <tr class="">
+              <td
+                colspan="6"
+                class="border-white fw-bold fs-5 text-black text-end"
+              >
+                Tổng cộng:
+              </td>
+              <td
+                class="fw-bold fs-4 text-danger text-end"
+                th:text="${#numbers.formatDecimal(ordersDetail.get(0).order.calculateAmount(), 0, 'COMMA', 0, 'POINT')} + ' đ'"
+              >
+                ???
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+    <script
+      type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"
+    ></script>
+    <script type="text/javascript">
+      $("body").on("click", "#btnExport", function () {
+        html2canvas($("#tblCustomers")[0], {
+          onrendered: function (canvas) {
+            var data = canvas.toDataURL();
+            var docDefinition = {
+              content: [
+                {
+                  image: data,
+                  width: 500,
+                },
+              ],
+            };
+            pdfMake.createPdf(docDefinition).download("customer-details.pdf");
+          },
+        });
+      });
+    </script>
+  </main>
+</html>

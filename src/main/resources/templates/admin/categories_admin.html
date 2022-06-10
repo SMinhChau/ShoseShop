@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layouts/main_admin_layout">
+<th:block layout:fragment="titleAdmin">
+    <title>Danh sách loại sản phẩm</title>
+</th:block>
+
+
+<main layout:fragment="content">
+    <div class="width-full-sidebar">
+        <div class="container-fluid">
+            <form class="row p-5 pt-0" th:action="@{/admin/categories}" th:object="${categories}" method="post">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h3 class="p-4">Caterories</h3>
+                    </div>
+                    <div class="col-sm-4 text-end row align-items-center">
+                        <div class="col">
+                            <a href="/admin/category/add" class="btn btn-warning btn-warning">New Caterory</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12  bg-white">
+                    <div class="row justify-content-start align-items-center">
+                        <div class="col-md-1 text-end">
+                            <button type="button" class="btn btn-outline-secondary"><i class="fa fa-sliders" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="col-md-11">
+                            <div class="input-group p-4 ps-0">
+                                <button id="btnsearch" class="btn btn-secondary"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                <input aria-describedby="btnsearch" type="text" class="form-control " placeholder="Start typing to search for categories" aria-label="Username">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="table__product">
+                            <table class="table">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting_disabled text-center" style="width: 150px;">
+                                            #
+                                        </th>
+                                        <th class="">Name</th>
+                                        <th class="text-center" style="width:200px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="" th:each="category, stt:${categories}">
+                                        <td class="align-middle text-center" th:text="${stt.index+1}"></td>
+                                        <td class="align-middle">
+                                            <h6 href="#" class="align-middle m-0" th:text="${#strings.capitalizeWords(category.name)}">10099999d</h6>
+                                        </td>
+                                        <td class="align-middle text-center"><a type="button" th:href="'/admin/category/'+ ${category.id}" class="btn btn-success"><i class="fa fa-pencil-square-o p-1 m-0" aria-hidden="true"></i>Edit</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+            </form>
+
+            </div>
+            <script>
+            </script>
+</main>
+
+</html>

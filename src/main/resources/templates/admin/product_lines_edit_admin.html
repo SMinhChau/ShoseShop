@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layouts/main_admin_layout">
+<th:block layout:fragment="titleAdmin">
+    <title>Chỉnh sửa dòng sản phẩm</title>
+</th:block>
+
+
+<main layout:fragment="content">
+    <div class="width-full-sidebar">
+        <div class="container-fluid">
+            <form class="row p-5 pt-0" th:action="'/admin/product-line/' +${productLine.id}" th:object="${productLine}" method="post">
+                <h3 class="p-4">Add Product-Line</h3>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-md-12 p-3 bg-white border border-2">
+                            <h5>Basic information</h5>
+                            <div class="row">
+                                <div class="col-md-12 mt-3 mb-3">
+                                    <p>Product-Line Name <span class="text-danger">(*)</span> </p>
+                                    <input type="text" class="form-control" th:field="*{name}" />
+                                    <span class="text-danger"></span>
+                                    <div class="alert alert-warning" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                                </div>
+                                <div class="col-md-12 mt-3 mb-3">
+                                    <div class="col-md-12 mt-3">
+                                        <p class="d-flex justify-content-between">
+                                            <span class="fs-5">Brands <span class="ms-2 text-danger">(*)</span></span>
+                                        </p>
+                                        <select th:name="brand" class="form-select" id="brandSelect" required>
+                                              <option value="" disabled >Select Brand</option>
+                                              <option disabled
+                                                th:each="item:${brands}"
+                                                th:value="${item.id}"
+                                                th:text="${item.name}"
+                                                th:selected="${item.id == productLine.brand.id}"
+                                              >
+                                                1
+                                              </option>
+                                            </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <input class="btn btn-primary mt-3 w-100" type="submit" value="Submit" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 p-3 mt-4">
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    </div>
+    <script th:inline="javascript">
+    </script>
+</main>
+
+</html>

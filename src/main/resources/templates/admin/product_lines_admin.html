@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layouts/main_admin_layout">
+
+<th:block layout:fragment="titleAdmin">
+    <title>Danh sách dòng sản phẩm</title>
+</th:block>
+
+<main layout:fragment="content">
+    <div class="width-full-sidebar">
+        <div class="container-fluid">
+            <form class="row p-5 pt-0" th:action="@{/admin/product-lines}" th:object="${productLines}" method="post">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h3 class="p-4">Product-Lines</h3>
+                    </div>
+                    <div class="col-sm-4 text-end row align-items-center">
+                        <div class="col">
+                            <a href="/admin/product-line/add" class="btn btn-warning btn-warning">New Product-Line</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12  bg-white">
+                    <div class="row justify-content-start align-items-center">
+                        <div class="col-md-1 text-end">
+                            <button type="button" class="btn btn-outline-secondary"><i class="fa fa-sliders" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="col-md-11">
+                            <div class="input-group p-4 ps-0">
+                                <button id="btnsearch" class="btn btn-secondary"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                <input aria-describedby="btnsearch" type="text" class="form-control " placeholder="Start typing to search for product-lines" aria-label="Username">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+
+                        <div class="table__product">
+                            <table class="table">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting_disabled text-center" style="width: 100px;">
+                                            #
+                                        </th>
+                                        <th class="tablesorter-header" colspan="2">Name
+                                        </th>
+                                        <th class="tablesorter-header" style="width: 200px;">Brand</th>
+                                        <th class="align-middle text-center" style="width:150px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="" th:each="productLine, stt:${productLines}">
+                                        <td class="align-middle text-center" th:text="${stt.index+1}" style="width: 70px;" colspan="2">
+                                            1
+                                        </td>
+
+                                        <td class="align-middle">
+                                            <h6 href="#" class="align-middle m-0" th:text="${#strings.capitalizeWords(productLine.name)}">A Name Customer</h6>
+
+                                        </td>
+                                        <td class="align-middle" style="width: 200px;" th:text="${productLine.brand.name}">Brand</td>
+
+                                        <td class="align-middle text-center"><a type="button" th:href="'/admin/product-line/'+ ${productLine.id}" class="btn btn-success"><i class="fa fa-pencil-square-o p-1 m-0" aria-hidden="true"></i>Edit</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="container p-0">
+
+                        </div>
+                    </div>
+
+
+            </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $("#productLineSelect").change(function() {
+            $("#ipProductLine").val($(this).val())
+        })
+        $("#checkAllSize").click(function() {
+            $(".checkbox-size").not(this).prop('checked', this.checked);
+            if ($(this).is(":checked")) {
+                $(".quantitySize").prop("disabled", false)
+            } else {
+                $(".quantitySize").prop("disabled", true)
+
+            }
+        })
+        $(".checkbox-size").click(function() {
+            var ip = $(this).parent().parent().parent().children().last().children()[0];
+            if (ip == null) return;
+            if ($(this).is(":checked")) {
+                ip.disabled = false;
+            } else {
+                ip.disabled = true;
+                ip.value = ""
+            }
+            $("#checkAllSize").prop("checked", false)
+        })
+    </script>
+
+
+    <script th:inline="javascript">
+    </script>
+</main>
+
+</html>

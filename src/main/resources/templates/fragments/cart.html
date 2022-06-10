@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="cartFragment">
+
+    <!-- Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title text-center d-block" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col" class="text-center">#</th>
+                            <th scope="col" class="text-center" style="width: 70px"></th>
+                            <th scope="col" class="w-50">Tên sản phẩm</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col" style="width: 150px">Giá tiền</th>
+                            <th scope="col" style="width: 20px"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="item-cart"></tbody>
+                    </table>
+                    <div>
+                        <h4 class="text-end" id="total-amount">
+                            Tổng cộng: <span class="text-danger">0đ</span>
+                        </h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Quay lại</button>
+                    <button onclick="checkLogin()" type="button" class="btn btn-danger">Đặt hàng
+                        ngay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script  th:inline="javascript">
+        function checkLogin() {
+            /*<![CDATA[*/
+            var fullName = /*[[${session.fullName}]]*/;
+            /*]]>*/
+
+            if(fullName == null){
+                Swal.fire({
+                    title: 'Mời bạn đăng nhập để có thể mua hàng!',
+                    text: "Chúng tôi sẽ đưa bạn đến trang đăng nhập",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/user/order";
+                    }
+                })
+            }else{
+                window.location.href = "/user/order";
+            }
+
+        };
+
+        /*PROCESS ORDER*/
+        function order(){
+
+            var productSizeId = $("input[name='size']:checked").val();
+            var quantity = $("#quantity").val();
+            $.ajax({
+                type: "POST",
+                url: "/api/cart/add/" + productSizeId,
+                data: { quantity: quantity },
+                success: function (res) {
+                    checkLogin();
+                },
+            });
+
+        }
+
+        /* PROCESS CART */
+        function loadDataCart(res) {
+            let items = res.items;
+            const numberFormat = new Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+            });
+            let itemsHtml = items.map((item, index) => {
+                return `
+                        <tr>
+                          <th scope="row" class="align-middle">${index + 1}</th>
+                          <th > <img
+                                  id="img_02"
+                                  src="/images/products/${item.avatar}"
+                          /></th>
+                          <td class="align-middle">${item.productName} (size: ${
+                    item.productSize
+                })</td>
+                          <td class="align-middle">
+                            <input class="form-control" type="number" min="1" max="${
+                    item.quantityMax
+                }" value="${
+                    item.quantity
+                }" onblur="updateCartItem(${item.productSizeId},this)"/>
+                          </td>
+                          <td class="align-middle">${numberFormat.format(
+                    item.price
+                )}</td>
+                          <td class="align-middle"><button class="btn btn-danger" onclick="deleteCartItem(${
+                    item.productSizeId
+                })"><i class="fa fa-times-circle" aria-hidden="true"></i></button></td>
+                    </tr>
+                    `;
+            });
+            itemsHtml = itemsHtml.join("");
+            $("#item-cart").html(itemsHtml);
+            $("#total-amount").text(numberFormat.format(res.totalAmount));
+            $("#exampleModalLabel").text(
+                "BẠN CÓ " + res.totalQuantity + " SẢN PHẨM TRONG GIỎ HÀNG"
+            );
+            $(".quantityItemCart").text(res.totalQuantity + " sản phẩm");
+        }
+
+        function addCartItem() {
+            var productSizeId = $("input[name='size']:checked").val();
+            var quantity = $("#quantity").val();
+            $.ajax({
+                type: "POST",
+                url: "/api/cart/add/" + productSizeId,
+                data: { quantity: quantity },
+                success: function (res) {
+                    loadDataCart(res);
+                },
+            });
+        }
+
+        function updateCartItem(productSizeId, obj) {
+            let max = Number($(obj).attr("max"));
+            let val = Number($(obj).val());
+            if (val>max){
+                val=max;
+                $(obj).val(max);
+            }
+            $.ajax({
+                type: "PUT",
+                url: "/api/cart/edit/" + productSizeId,
+                data: { quantity: val },
+                success: function (res) {
+                    loadDataCart(res);
+                },
+            });
+        }
+
+        function getDataCart() {
+            $.ajax({
+                type: "GET",
+                url: "/api/cart/data",
+                success: function (res) {
+                    loadDataCart(res);
+                },
+            });
+        }
+
+        function deleteCartItem(productSizeId) {
+            if (
+                confirm("Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng không ?")
+            ) {
+                $.ajax({
+                    type: "DELETE",
+                    url: "/api/cart/delete/" + productSizeId,
+                    success: function (res) {
+                        loadDataCart(res);
+                    },
+                });
+            }
+        }
+        ;
+    </script>
+</div>
+</html>

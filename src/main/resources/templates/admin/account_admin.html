@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="layouts/main_admin_layout"
+>
+  <main layout:fragment="content">
+    <div class="width-full-sidebar">
+      <div class="container-fluid">
+        <div class="row p-5 pt-0" >
+          <div class="row">
+            <div class="col-sm-8">
+              <h3 class="p-4">Import File</h3>
+            </div>
+            <div class="col-sm-4 text-end">
+              <a href="" class="btn btn-secondary btn-secondary m-4"><input value="Import" type="file" id="importEXCELabel" name="importEXCELabel"/></a>
+              <a href="/admin/product/add" class="btn btn-warning btn-warning">New product</a>
+            </div>
+          </div>
+
+          <div class="col-md-12 bg-white">
+            <div class="row justify-content-start align-items-center">
+              <div class="col-md-1 text-end">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  id="resetFilter"
+                >
+                  <i class="fa fa-refresh fs-4" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="col-md-11">
+                <div class="input-group p-4 ps-0">
+                  <button id="btnsearch" class="btn btn-secondary" onclick="textSearch()">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </button>
+                  <input
+                    aria-describedby="btnsearch"
+                    type="text"
+                    class="form-control"
+                    placeholder="Start typing to search for products"
+                    id="filterProduct"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 bg-white">
+            <form class="table__product" th:action="@{/admin/products/import}"   th:object="${form}" method="post" enctype="multipart/form-data">
+              <table class="table">
+                <thead>
+                  <tr role="row">
+                    <th class="">#</th>
+                    <th class="">Image</th>
+                    <th class="w-25" style="min-width: 405px !important">
+                      <a href="#" onclick="sortProducts('name'); return false;"
+                        >Name <i class="fa fa-sort" aria-hidden="true"></i
+                      ></a>
+                    </th>
+                    <th class="">
+                      <a
+                        href="#"
+                        onclick="sortProducts('productLine'); return false;"
+                        >Product Line
+                        <i class="fa fa-sort" aria-hidden="true"></i
+                      ></a>
+                    </th>
+                    <th class="">
+                      <a
+                        href="#"
+                        onclick="sortProducts('category'); return false;"
+                        >Category <i class="fa fa-sort" aria-hidden="true"></i
+                      ></a>
+                    </th>
+                    <th class="text-end">
+                      <a href="#" onclick="sortProducts('price'); return false;"
+                        >Price <i class="fa fa-sort" aria-hidden="true"></i
+                      ></a>
+                    </th>
+                    <th class="text-end">
+                      <a
+                        href="#"
+                        onclick="sortProducts('promotionPrice'); return false;"
+                        >Promotion Price
+                        <i class="fa fa-sort" aria-hidden="true"></i
+                      ></a>
+                    </th>
+                    <th class="text-center" style="width: 100px">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="tableProduct">
+                  </tbody>
+              </table>
+              <button class="btn btn-primary" type="submit">IMPORT <i class="fa fa-upload" aria-hidden="true"></i></button>
+            </form>
+            <div class="text-end"> 
+              <button class="btn btn-primary" id="btnImport">IMPORT <i class="fa fa-upload" aria-hidden="true"></i></button>
+            </div>
+          </div>
+          <div class="col-md-7 bg-white pt-3 pb-3">
+        </div>
+    </div>
+    <script defer th:inline="javascript">
+      	function goToPageClick(page) {
+      		const oldPage = pageCurrent
+      		switch (page) {
+      			case '...':
+      				return;
+      			case 'PRE_PAGE':{
+      				pageCurrent--;
+      				break;
+      			}
+      			case 'NEXT_PAGE': {
+      				pageCurrent++;
+      				break;
+      			}
+      			case 'GO_TO_PAGE': {
+      				valuePage = $('#ipGoToPage').val();
+      				if(valuePage >= 1 && valuePage <= maxPages) {
+      					pageCurrent = valuePage
+      				} else {
+      					alert("NO VALUE PAGE")
+      					return;
+      				}
+      				break;
+      			}
+      			default: {
+      				pageCurrent = page;
+      			}
+      		}
+      		if(oldPage == pageCurrent) {
+      			return;
+      		}
+      		$.ajax({
+      		type: "GET",
+      		url: "/api/admin/product/filter",
+      		data: {
+      			page: pageCurrent,
+      			rowOfPage: rowOfPage,
+      			sort: sort,
+      			orderby: orderby
+      		},
+      		success: function (res) {
+      			loadProducts(res)
+      			activeBtnPage(pageCurrent)
+      		},
+      		});
+      	}
+      $("#selectShowProduct").change(function() {
+          textSearch()
+      })
+      /* Text Search */
+      $("#filterProduct").keypress(function (e) {
+        /* PHIM ENTER */
+          if(e.keyCode == 13) {
+            textSearch()
+          }
+      })
+
+      function textSearch() {
+           rowOfPage =  $("#selectShowProduct").val()
+           const value  =  $("#filterProduct").val()
+      	    window.location.href = `/admin/products?text=${value}&rows=${rowOfPage}`
+      }
+
+      function sortProducts(bySort) {
+      	const locationHref = window.location.search
+      	console.log(locationHref)
+      	console.log(locationHref.includes('asc'))
+      	if(locationHref.includes('asc'))
+      		window.location.href  = `/admin/products?rows=${rowOfPage}&sort=${bySort}&orderby=desc`
+      	else
+      		window.location.href = `/admin/products?rows=${rowOfPage}&sort=${bySort}&orderby=asc`
+      }
+      /* RESET FILTER */
+      $('#resetFilter').click(function() {
+      	window.location.href = window.location.pathname
+      })
+      function activeBtnPage(page) {
+      	let totalPages = []
+      	let MAX_TOTAL_PAGES = 7;
+      	if(page <= 4) {
+      		for (let i = 1; i <= 5; i++) {
+      			totalPages.push(i);
+      		}
+      		totalPages.push('...');
+      		totalPages.push(maxPages);
+      	}
+      	if(page > 4 && page < maxPages - 3) {
+      		totalPages.push(1);
+      		totalPages.push('...');
+      		for (let i = page - 1; i <= Number.parseInt(page) + 1; i++) {
+      			totalPages.push(i);
+      		}
+      		totalPages.push('...');
+      		totalPages.push(maxPages);
+      	}
+      	if(page >= maxPages - 3 && page <= maxPages) {
+      		totalPages.push(1);
+      		totalPages.push('...');
+      		for (let i = maxPages - 4; i <= maxPages; i++) {
+      			totalPages.push(i);
+      		}
+      	}
+      	$("#listBtnPage span").remove()
+      	totalPages.forEach(e => $("#listBtnPage").append(`
+      						<span class=" ms-1 me-1 ">
+      							<button  type="button"
+      							onclick="goToPageClick('${e}')"
+      							class="${e == page?'btnGoToPage btn btn-warning': (e == '...' ? 'btn btn-light' :'btnGoToPage btn btn-outline-secondary')}"
+      							style="width: 50px"
+      							>${e}</button>
+      						</span>
+      	`))
+      	/* SET BTN NEXT_PAGE */
+      	if(page == maxPages) {
+      		$("#btnNextPage").prop("disabled", true)
+      	} else {
+      		$("#btnNextPage").prop("disabled", false)
+      	}
+      	/* SET BTN PRR_PAGE */
+      	if(page == 1) {
+      		$("#btnPrePage").prop("disabled", true)
+      	} else {
+      		$("#btnPrePage").prop("disabled", false)
+      	}
+      	/* CHANGE SHOWING */
+      	const valueShowProduct = $('#selectShowProduct').val()
+      	$('#minQuantityProductOfPage').text(Number.parseInt(page*valueShowProduct-valueShowProduct)+1)
+      	$('#maxQuantityProductOfPage').text(Math.min(page*valueShowProduct, maxQuantityProducts))
+
+      }
+      const numberFormat = new Intl.NumberFormat("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            });
+      
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/list_product_admin.js}"></script>
+  </main>
+</html>

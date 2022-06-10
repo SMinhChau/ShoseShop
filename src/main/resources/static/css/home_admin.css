@@ -1,0 +1,45 @@
+:root {
+  --bg-primary: #0d6efd;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+.sidebar {
+  max-width: 250px;
+  width: 250px;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+.list-sidebar > li {
+  margin: 3px 0;
+  border-radius: 5px;
+}
+.list-sidebar > li ul > li {
+  margin: 3px 0;
+  border-radius: 5px;
+}
+.list-sidebar > li ul > li:hover {
+  background-color: var(--bg-primary);
+}
+.list-sidebar > li:hover > .nav-link {
+  background-color: var(--bg-primary);
+}
+.width-full-sidebar {
+  width: calc(100vw - 250px);
+  min-width: calc(100vw - 250px);
+}
+.min-w-icon {
+  min-width: 25px;
+}
+.h-90px {
+  height: 90px;
+}
+.threedot {
+  display: inline-block;
+  width: 130px;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}

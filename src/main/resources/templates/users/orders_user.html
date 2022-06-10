@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="layouts/main_layout"
+>
+  <th:block layout:fragment="title">
+    <title>Danh sách đơn hàng</title>
+  </th:block>
+  <main layout:fragment="content">
+    <div class="container">
+      <nav aria-label="breadcrumb" class="parent_breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+          <li class="breadcrumb-item active" aria-current="page">
+            Danh sách đơn hàng
+          </li>
+        </ol>
+      </nav>
+    </div>
+    <div class="container">
+      <div class="row">
+        <h3 class="text-center">Danh sách đơn hàng</h3>
+        <table class="table table-hover mt-3 mb-lg-5">
+          <thead>
+            <tr class="table-secondary">
+              <th scope="col">STT</th>
+              <th scope="col" style="width: 50">Mã đơn</th>
+              <th scope="col">Ngày mua</th>
+              <th scope="col">Đơn mua ( Xem trước )</th>
+              <th scope="col" class="text-center">Số lượng</th>
+              <th scope="col" class="text-end">Giảm giá</th>
+              <th scope="col" class="text-end">Tổng tiền</th>
+              <th scope="col">Tình trạng</th>
+              <th scope="col">Xem chi tiết</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="order, stt: ${orders}">
+              <th scope="row" class="align-middle" th:text="${stt.index + 1}">
+                1
+              </th>
+              <td
+                class="align-middle fw-bold"
+                th:text="${order.generateCode()}"
+              >
+                1
+              </td>
+              <td
+                class="align-middle"
+                th:text="${#dates.format(order.createdDate, 'HH:mm | dd-MM-yyyy')}"
+              >
+                13:52:21 05-05-2022
+              </td>
+              <td class="align-middle">
+                <div class="d-flex">
+                  <div>
+                    <img
+                      height="70"
+                      width="70"
+                      th:src="@{'/images/products/'+${listOrderDetail.get(stt.index).productSize.product.avatar}}"
+                    />
+                  </div>
+                  <div class="ms-2 w-100">
+                    <a
+                      th:href="'/product/'+${listOrderDetail.get(stt.index).productSize.product.id}"
+                      class="text-primary"
+                      th:text="${listOrderDetail.get(stt.index).productSize.product.name}"
+                      >Adidas X9000L4 Core Black / Signal Orange</a
+                    >
+                    <div class="d-flex mt-2">
+                      <span
+                        class=""
+                        th:text="${#numbers.formatDecimal(listOrderDetail.get(stt.index).productSize.product.promotionPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                        >1,000,000
+                      </span>
+                      <span class="badge bg-secondary fs-6 ms-3"
+                        >Size:
+                        <span
+                          th:text="${listOrderDetail.get(stt.index).productSize.size.name}"
+                          >30</span
+                        ></span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td class="align-middle text-center">
+                <span
+                  class="fw-bold"
+                  th:text="x+${quantityOrdersDetail.get(stt.index)}"
+                  >1</span
+                >
+              </td>
+              <td class="align-middle text-end">
+                <span
+                  class="fs-6 fw-bold"
+                  th:text="'-'+${#numbers.formatDecimal(order.calculateDiscount(), 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                  >1</span
+                >
+              </td>
+              <td class="align-middle text-end">
+                <span
+                  class="text-danger fs-6 fw-bold"
+                  th:text="${#numbers.formatDecimal(order.calculateAmount(), 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                  >1</span
+                >
+              </td>
+              <td class="align-middle">
+                <span class="text-secondary fw-bold" th:text="${order.status}"
+                  >Chờ xác nhận</span
+                >
+              </td>
+              <td class="align-middle">
+                <a th:href="'/user/orders/'+${order.id}" class="btn btn-primary"
+                  >Xem thêm</a
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</html>

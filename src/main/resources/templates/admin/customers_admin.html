@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layouts/main_admin_layout">
+<th:block layout:fragment="titleAdmin">
+    <title>Danh sách Khách hàng</title>
+</th:block>
+
+
+
+<main layout:fragment="content">
+    <div class="width-full-sidebar">
+        <div class="container-fluid">
+            <form class="row p-5 pt-0" th:action="@{/admin/customers}" th:object="${customers}" method="post">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h3 class="p-4">Customers</h3>
+                    </div>
+                    <div class="col-sm-4 text-end row align-items-center">
+
+                    </div>
+                </div>
+                <div class="col-md-12  bg-white">
+                    <div class="row justify-content-start align-items-center">
+                        <div class="col-md-1 text-end">
+                            <button type="button" id="resetFilter" class="btn btn-outline-secondary"><i class="fa fa-sliders" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="col-md-11">
+                            <div class="input-group p-4 ps-0">
+                                <button type="button" id="btn-search" class="btn btn-secondary" onclick="searchPhone()"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                <input id="search-phone" th:value="${phone}" type=" text " class="form-control " placeholder="Start typing to search for customers " aria-label="Username ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 ">
+
+                        <div class="table__product ">
+                            <table class="table ">
+                                <thead>
+                                    <tr role="row ">
+                                        <th class="sorting_disabled text-center " style="width: 60px; ">
+                                            #
+                                        </th>
+                                        <th class="tablesorter-header " colspan="2 ">Name
+                                        </th>
+                                        <th class="tablesorter-header " style="width: 200px; ">Registered</th>
+                                        <th class="tablesorter-header " style="width: 200px; ">Phone</th>
+                                        <th class="tablesorter-header " style="width: 90px; ">Status</th>
+                                        <th class="align-middle text-center " style="width:150px; ">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class=" " th:each="customer,stt: ${customers} ">
+                                        <td class="align-middle text-center " colspan="2 " th:text="${stt.index+1} ">
+
+                                        </td>
+
+                                        <td class="align-middle ">
+                                            <div class="col product__name ">
+                                                <i class="fa fa-user p-1 " aria-hidden="true " style="color: blue; "></i>
+                                                <a href="# " th:text="${customer.fullName} ">A  Name Customer </a>
+                                            </div>
+                                            <div class="col " th:text="${customer.email} ">email</div>
+                                        </td>
+                                        <td class="align-middle " style="width: 150px; " th:text="${#dates.format(customer.createdDate, 'dd/MM/yyyy')} " id="createdDate-customer ">
+                                            1/1/1999</td>
+                                        <td class="align-middle " style="width: 200px; " th:text="${customer.phone} ">0795815444</td>
+                                        <td class="align-middle " style="width: 150px; " th:text="${customer.status}? 'Đang hoạt động' : 'Khoá tài khoản' ">Status</td>
+                                        <td class="align-middle text-center "><a type="button " th:href=" '/admin/customer/'+ ${customer.id} " class="btn btn-success "><i class="fa fa-pencil-square-o p-1 m-0 " aria-hidden="true "></i>Edit</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="container p-0 ">
+
+                        </div>
+                    </div>
+
+
+            </form>
+            </div>
+        </div>
+    </div>
+    <script>
+    </script>
+    <!-- Text Search -->
+    <script type="text/javascript ">
+        function searchPhone() {
+            var searchPhone = $('#search-phone').val();
+            window.location.href = "/admin/customers?phone=" + searchPhone;
+        }
+    </script>
+</main>
+
+</html>

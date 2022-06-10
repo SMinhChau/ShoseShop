@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="layouts/main_admin_layout"
+>
+<th:block layout:fragment="titleAdmin">
+  <title>Thêm tài khoản</title>
+</th:block>
+  <main layout:fragment="content">
+    <div class="width-full-sidebar">
+      <div class="container-fluid">
+        <div class="row p-2 pt-1" >
+          <div class="row">
+            <div class="col-sm-8">
+              <h3 class="p-4">Add User</h3>
+            </div>
+          </div>
+
+          <div class="col-md-12 bg-white row">
+            <form action="#" th:action="@{/admin/user/add}" th:object="${user}" method="post">
+              <div class="col-md-12 p-3 bg-white mt-4 border border-2">
+                <div class="row">
+                  <div class="col-md-6 offset-md-3">
+                    <p class="d-flex justify-content-between">
+                      <div th:if="${message != null}">
+                        <p class="text-danger" >[[${message}]]</p>
+                      </div>
+                      <span class="fs-5">Full name <span class="ms-2 text-danger">(*)</span></span>
+                    </p>
+                    <input type="text" class="form-control" th:field="*{fullName}" required>
+                    <div class="alert alert-warning" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+                  </div>
+                  <div class="col-md-6 offset-md-3">
+                    <p class="d-flex justify-content-between">
+                      <span class="fs-5">Email <span class="ms-2 text-danger">(*)</span></span>
+                    </p>
+                    <input type="text" class="form-control" th:field="*{email}" required>
+                    <div class="alert alert-warning" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                  </div>
+                  <div class="col-md-6 offset-md-3">
+                    <p class="d-flex justify-content-between">
+                      <span class="fs-5">Phone <span class="ms-2 text-danger">(*)</span></span>
+                    </p>
+                    <input type="text" class="form-control" th:field="*{phone}" required>
+                    <div class="alert alert-warning" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+                  </div>
+                  <div class="col-md-6 offset-md-3">
+                    <p class="d-flex justify-content-between">
+                      <span class="fs-5">Password<span class="ms-2 text-danger">(*)</span></span>
+                    </p>
+                    <input type="password" class="form-control" th:field="*{password}" required>
+                    <div class="alert alert-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                  </div>
+                  <div class="col-md-6 offset-md-3 d-flex justify-content-center p-3">
+                    <input type="submit" class="btn btn-primary w-50">
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <nav th:fragment="navbarFragment" class="menu" id="nav-menu">
+    <div class="menufix">
+      <ul class="list-group list-group-horizontal h-100 w-75">
+        <li class="list-group-item bg-transparent menufix__item">
+          <a
+            href="/"
+            class="d-flex flex-column align-items-center justify-content-end p-1"
+          >
+            <img
+              class="img-responsive mb-1"
+              width="40"
+              src="https://giaygiare.vn/images/pro-new.png"
+            />
+            <span class="text-warning">Trang chủ</span>
+          </a>
+        </li>
+        <li
+          class="list-group-item bg-transparent menufix__item menufix__dropdown"
+          th:each="item:${brands}"
+        >
+          <a
+            th:href="@{'/product/brand/'+${item.id}}"
+            class="d-flex flex-column align-items-center justify-content-end p-1"
+          >
+            <img
+              class="img-responsive mb-1"
+              width="40"
+              th:src="@{'/images/brands/'+${item.image}}"
+            />
+            <span class="text-white" th:text="${item.name}"></span>
+          </a>
+
+          <div class="menufix__dropdown-menu">
+            <div class="d-flex pe-5">
+              <ul class="menufix__item__ul">
+                <li
+                  class="pt-3 pb-3"
+                  th:each="subItem : ${item.productLines}"
+                  th:if="${item.productLines.size() > 1}"
+                >
+                  <a
+                    th:href="@{'/product/product-line/'+ ${subItem.id}}"
+                    th:text="${subItem.name}"
+                    >X9000</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <a
+        class="w-25 d-flex justify-content-end"
+        id="cart-menufix"
+        data-bs-toggle="modal"
+        data-bs-target="#cartModal"
+        onclick="getDataCart()"
+      >
+        <div
+          class="bg-warning d-flex flex-column justify-content-center align-items-center w-100px h-100"
+        >
+          <i class="fa fa-cart-plus" aria-hidden="true"></i>
+          <b
+            class="quantityItemCart"
+            th:text="${session.cart!=null?session.cart.totalQuantity:'0'} + ' sản phẩm'"
+          ></b>
+        </div>
+      </a>
+    </div>
+  </nav>
+</html>

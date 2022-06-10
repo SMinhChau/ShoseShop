@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layouts/main_layout">
+
+<th:block layout:fragment="title">
+    <title th:text="'Kết quả tìm kiếm: '+ ${key}"></title>
+</th:block>
+
+
+  <main layout:fragment="content">
+    <div class="container">
+      <nav aria-label="breadcrumb" class="parent_breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+          <li class="breadcrumb-item active" aria-current="page" th:text="${key}"></li>
+        </ol>
+      </nav>
+    </div>
+
+
+      <div class="container">
+        <div class="row list__card">
+          <div class="p-3 m-3 " th:if="${pageProduct==null || pageProduct.totalPages == 0}">Không tìm thấy kết quả phù hợp</div>
+          <th:block th:if="${pageProduct != null}">
+            <div class="col-md-3 col-sm-4" th:each="item : ${pageProduct.content}" >
+              <a th:href="'/product/'+${item.id}" class="card">
+                <div class="card__ribbon"><span>Đang hot</span></div>
+                <div class="card__img">
+                  <img
+                          th:src="@{'/images/products/'+${item.avatar}}"
+                          class="card-img-top"
+                  />
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title" th:text="${item.name}">
+
+                  </h5>
+                  <p class="card-text">
+                    <span class="text-warning fs-5" th:text="${#numbers.formatDecimal(item.promotionPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
+                    <span class="text-secondary fs-6 text-decoration-line-through"
+                          th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' đ'"
+                    ></span
+                    >
+                  </p>
+                </div>
+              </a>
+            </div>
+          </th:block>
+
+        </div>
+        <div class="d-flex justify-content-center" th:if="${pageProduct!=null && pageProduct.totalPages>0}">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item" th:classappend="${pageProduct.getNumber()==0?'disabled':''}">
+                <a class="page-link" th:href="@{'/product/search?key='+${key}+'&&page='+${pageProduct.getNumber()>1?pageProduct.getNumber():1}}" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <th:block th:if="${pageProduct.totalPages>0}" th:each="item: ${#numbers.sequence(1,pageProduct.totalPages)}">
+                  <li th:if="${(item>=pageProduct.getNumber()-5||item==1)&&(item<=pageProduct.getNumber()+5||item==pageProduct.totalPages)}" class="page-item"  th:classappend="${pageProduct.getNumber()+1==item?'active':''}"><a class="page-link" th:href="@{'/product/search?key='+${key}+'&&page='+${item}}" th:text="${item}">1</a></li>
+                  <li class="page-item disabled" th:if="${item>pageProduct.getNumber()+5 && item<=pageProduct.getNumber()+6}"><a class="page-link">..</a></li>
+                  <li class="page-item disabled" th:if="${item>pageProduct.getNumber()-7 && item<=pageProduct.getNumber()-6}"><a class="page-link">..</a></li>
+              </th:block>
+
+              <li class="page-item" th:classappend="${pageProduct.getNumber()+1==pageProduct.totalPages?'disabled':''}">
+                <a class="page-link" th:href="@{'/product/search?key='+${key}+'&&page='+${pageProduct.getNumber()+1==pageProduct.totalPages?pageProduct.totalPages:pageProduct.getNumber()+2}}" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+  </main>
+</html>

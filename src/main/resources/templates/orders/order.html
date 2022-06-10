@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Thanh toán đơn hàng</title>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+            let cart = /*[[${cart}]]*/;
+        /*]]>*/
+
+        if (cart == null || cart.totalQuantity == 0){
+            alert("Chưa có sản phẩm trong giỏ hàng!");
+            window.location.href = "/"
+        }
+
+    </script>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/cart.css}"/>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row ">
+        <div class="col-md-5 offset-md-1 mt-5 pe-5">
+            <h4 class="mt-3">TULO SHOP - GIÀY THỂ THAO</h4>
+            <h6 class="mt-3">Thông tin giao hàng</h6>
+            <form class="row" th:action="@{/user/order}" th:object="${order}" method="post">
+                <div class="col-md-6">
+                    <input
+                            type="tel"
+                            placeholder="Số điện thoại"
+                            th:value="${customer.phone}"
+                            readonly
+                            class="form-control"
+                            name="customerPhone"
+
+                    />
+                </div>
+                <div class="col-md-6">
+                    <input
+                            type="text"
+                            placeholder="Tên"
+                            th:value="${customer.fullName}"
+                            readonly
+                            class="form-control"
+                    />
+                </div>
+                <div class="col-md-12 mt-3">
+                    <input
+                            type="email"
+                            placeholder="Email"
+                            th:value="${customer.email}"
+                            readonly
+                            class="form-control"
+                    />
+                </div>
+                <div class="col-md-12 mt-3">
+                    <select class="form-select"   name="shipAddressId" required>
+                        <option th:each="item : ${customer.addresses}" th:selected="${item.status==true}" th:value="${item.id}" th:text="${item.detail + ', ' + item.address.ward+ ', ' + item.address.district+ ', ' + item.address.city}"></option>
+                    </select>
+                </div>
+
+                <div class="text-end col-md-12 mt-1">
+                    <a type="button" onclick="loadDataCity()" class="text-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                        Thêm địa chỉ mới <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                    </a>
+                </div>
+
+                <div class="col-md-12 mt-3">
+              <textarea
+                      th:field="*{note}"
+                      class="form-control w-100"
+                      placeholder="Ghi chú"
+                      rows="4"
+              ></textarea>
+                </div>
+                <div class="col-md-12 mt-3">
+                    <input
+                            class="form-check-input mt-4"
+                            type="radio"
+                            name="payment"
+                            id="payment1"
+                            checked
+                    />
+                    <label for="payment1" class="form-check-label mt-3"
+                    >Thanh toán khi nhận hàng</label
+                    ><br/>
+<!--                    <input-->
+<!--                            class="form-check-input mt-4"-->
+<!--                            type="radio"-->
+<!--                            name="payment"-->
+<!--                            id="payment2"-->
+<!--                    />-->
+<!--                    <label for="payment2" class="form-check-label mt-3"-->
+<!--                    >Thanh toán chuyển khoản</label-->
+<!--                    >-->
+                </div>
+                <input th:field="*{promotionCode}" id="promotion-code" hidden>
+                <div class="col-md-12 mt-3">
+                    <input
+                            type="submit"
+                            class="btn btn-danger w-100"
+                            value="Đặt hàng ngay"
+                    />
+                </div>
+            </form>
+
+            <!-- Modal -->
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel">
+                <div class="modal-dialog container-fluid">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-center" id="exampleModalLabel">Thêm địa chỉ mới</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form class="form-group" action="/user/address" th:object="${customerAddress}" method="post">
+                            <div class="modal-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-4 offset-md-1 col-form-label">Tỉnh/Thành phố</div>
+                                    <div class="col-md-7">
+                                        <select class="form-select" id="city" onchange="loadDataDistrict()">
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-4 offset-md-1 col-form-label">Quận/Huyện</div>
+                                    <div class="col-md-7">
+                                        <select class="form-select" id="district" onchange="loadDataWard()" required>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-4 offset-md-1 col-form-label">Phường/Xã</div>
+                                    <div class="col-md-7">
+                                        <select th:field="*{addressId}" class="form-select" id="ward" required
+                                                name="'ward'">
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row col-md-11 offset-md-1">
+                                    <textarea name="detail" th:field="*{detail}" placeholder="Tên đường, số nhà"
+                                              class="form-controll" rows="2" required></textarea>
+                                </div>
+                                <input id="customer-id" type="hidden" th:value="${customer.id}"  th:field="*{customerId}">
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                                <button type="submit" class="btn btn-primary" value="submit">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="mt-5 ">
+                <a href="#" class="text-primary">Quay lại</a>
+            </div>
+        </div>
+        <div class="col-md-6 border-start border min-vh-100 sticky-top">
+            <div class="p-3  mt-5">
+                <table class="w-100">
+                    <tbody id="item-cart">
+                    <tr class="" th:each="item : ${cart.items}">
+                        <td class="order">
+                            <img
+                                    class="order__img"
+                                    width="70"
+                                    height="70"
+                                    alt="Adidas Yeezy Slide Bone"
+                                    th:src="@{'/images/products/' + ${item.avatar}}"
+                            />
+                            <span class="order__img__quantity" th:text="${item.quantity}"></span>
+                        </td>
+                        <td class="align-middle p-3">
+                            <h6 th:text="${item.productName}"></h6>
+                            <span class="text-primary" th:text="'( Size '+ ${item.productSize} +' )'"></span>
+                        </td>
+                        <td class="align-middle text-end"
+                            th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' đ'">
+                        </td>
+                        </td>
+                        <td class="align-middle text-end">
+                            <button th:onclick="'deleteCartItem('+${item.productSizeId}+')'" class="btn btn-danger"><i
+                                    class="fa fa-times-circle-o" aria-hidden="true"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12 mt-3 input-group">
+                <input
+                        type="text"
+                        placeholder="Mã giảm giá"
+                        id="code"
+                        class="form-control"
+                        aria-describedby="basic-addon2"
+                />
+                <button
+                        type="submit"
+                        class="btn btn-warning input-group-text text-white"
+                        id="basic-addon2"
+                        onclick="checkDiscount()"
+                >Áp dụng ngay
+                </button>
+                <div class="row col-md-11 col-md-offset-1 mt-1 d-none" id="status-code">
+                    <small class="text-danger ">Hết mã</small>
+                </div>
+            </div>
+            <hr/>
+            <div class="col-md-12 mt-3 d-flex justify-content-between">
+                <span>Tổng cộng</span>
+                <h5 id="total-amount"
+                    th:text="${#numbers.formatDecimal(cart.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' đ'">500.000 đ</h5>
+            </div>
+            <div class="col-md-12  d-flex justify-content-between d-none" id="discount" >
+                <span>Khuyến mãi</span>
+                <h5>-10000 đ</h5>
+            </div>
+            <div class="col-md-12 d-flex justify-content-between text-danger">
+                <h5>Thành tiền</h5>
+                <h5 id="payment"
+                    th:text="${#numbers.formatDecimal(cart.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' đ'">500.000 đ</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:utext="${message_order}">
+</th:block>
+
+<script th:inline="javascript">
+    /*PROCESS DISCOUNT*/
+
+    /*<![CDATA[*/
+        var amount = /*[[${cart.totalAmount}]]*/;
+    /*]]>*/
+    var discount=0;
+
+    function checkDiscount(){
+        const numberFormat = new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+        });
+        let code = $("#code").val();
+        if (code == ""){
+            $("#status-code").addClass("d-none");
+            $("#discount").addClass("d-none");
+            $("#payment").html(numberFormat.format(amount));
+            discount = 0;
+        }else{
+            $.get("/api/promotion",
+                {"code":code, "amount": amount},
+                function (data){
+                    if (data.status){
+                        $("#discount").removeClass("d-none");
+                        $("#discount").children("h5").html("-" + numberFormat.format(data.discount));
+                        $("#payment").html(numberFormat.format(amount - data.discount));
+                        discount = data.discount;
+                        $("#status-code").addClass("d-none");
+                        $("#promotion-code").val(data.code);
+                    }else{
+                        $("#status-code").removeClass("d-none");
+                        $("#status-code").children().html(data.message)
+                        $("#discount").addClass("d-none");
+                        discount = 0;
+                        $("#payment").html(numberFormat.format(amount));
+                        $("#promotion-code").val("");
+                    }
+
+                }
+            );
+        }
+    }
+
+
+    /*PROCESS ADD ADDRESS*/
+    function loadDataCity() {
+
+        /*<![CDATA[*/
+        var customerId = /*[[${customer.id}]]*/;
+        /*]]>*/
+
+        $("#customer-id").val(customerId);
+
+        $.get("/api/address/city", function (data) {
+            htmt = data.map(item => {
+                return `
+                    <option value="${item}">${item}</option>
+                 `
+            });
+            htmt = htmt.join("");
+            $("#city").html(htmt);
+            $("#city").val("Thành phố Hồ Chí Minh").change();
+
+        })
+    }
+
+    function loadDataDistrict() {
+        let city = $("#city").val();
+        $.get("/api/address/district?city=" + city, function (data) {
+            htmt = data.map(item => {
+                return `
+                    <option value="${item}">${item}</option>
+                 `
+            });
+            htmt = htmt.join("");
+            $("#district").html(htmt);
+            $("#district").val(data[0]).change();
+            $("#ward").html("");
+        })
+    }
+
+    function loadDataWard() {
+        let city = $("#city").val();
+        let district = $("#district").val();
+        let ward = "";
+        $.get("/api/address/ward?city=" + city + "&district=" + district, function (data) {
+
+            data.forEach(item => {
+                for (var i in item) {
+                    ward = ward + `<option value="${i}">${item[i]}</option>`
+                }
+            });
+
+            $("#ward").html(ward);
+            $('#ward :nth-child(1)').prop('selected', true);
+        })
+    }
+
+    /*PROCESS DELETE AND LOAD CART ITEM*/
+    function loadDataCart(res) {
+        let items = res.items;
+        const numberFormat = new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+        });
+        let html = items.map(item => {
+            return `
+                      <tr class="">
+                      <td class="order">
+                        <img
+                          class="order__img"
+                          width="70"
+                          height="70"
+                          alt="Adidas Yeezy Slide Bone"
+                          src="/images/products/${item.avatar}"
+                        />
+                        <span class="order__img__quantity">${item.quantity}</span>
+                      </td>
+                      <td class="align-middle p-3">
+                        <h6>${item.productName}</h6>
+                        <span class="text-primary" >( Size ${item.productSize} )</span>
+                      </td>
+                      <td class="align-middle text-end">
+                            ${numberFormat.format(item.price)}
+                      </td>
+                    </td>
+                    <td class="align-middle text-end">
+                      <button onclick="deleteCartItem(${item.productSizeId})" class="btn btn-danger"><i class="fa fa-times-circle-o" aria-hidden="true"></i></button>
+                    </td>
+                </tr>
+              `
+        });
+
+        html = html.join("");
+        $("#item-cart").html(html);
+        $("#total-amount").text(numberFormat.format(res.totalAmount));
+        $("#payment").html(numberFormat.format(res.totalAmount - discount));
+    }
+
+    function deleteCartItem(productSizeId) {
+        if (
+            confirm("Bạn có chắc muốn xóa sản phẩm này khỏi đơn hàng không ?")
+        ) {
+            $.ajax({
+                type: "DELETE",
+                url: "/api/cart/delete/" + productSizeId,
+                success: function (res) {
+                    if (res.items.length ==0){
+                        window.location.reload();
+                    }
+                    amount = res.totalAmount;
+                    loadDataCart(res);
+                },
+            });
+        }
+    };
+
+</script>
+</body>
+</html>

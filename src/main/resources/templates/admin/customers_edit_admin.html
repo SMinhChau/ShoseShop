@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layouts/main_admin_layout">
+
+<th:block layout:fragment="titleAdmin">
+    <title>Chỉnh sửa Khách hàng</title>
+</th:block>
+
+<main layout:fragment="content">
+    <div class="width-full-sidebar">
+        <div class="container-fluid">
+            <form class="row p-5 pt-0" th:action="'/admin/customer/' + ${customer.id}" th:object="${customer}" method="post">
+                <h3 class="p-4">Update Customer</h3>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-md-12 p-4 bg-white border border-2">
+                            <h5>Basic information</h5>
+                            <div class="row">
+
+                                <div class="col row p-2">
+                                    <div class="col-4 mt-3 mb-3">
+                                        <p>Full Name
+                                        </p>
+                                        <input disabled th:field="*{fullName}" type="text" class="form-control" placeholder="Full name" />
+                                        <span class="text-danger p-1" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+                                    </div>
+                                    <div class="col-8 mt-3 mb-3">
+                                        <p>Email
+                                        </p>
+                                        <input disabled th:field="*{email}" type="text" class="form-control" placeholder="email@gmail.com" />
+                                        <span class="text-danger p-1" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                                        </div>
+                                       
+                                    </div>
+
+                                    <div class="row col-md-12 p-2">
+                                        <div class="col-md-6">
+                                            <p>Phone number
+                                            </p>
+                                            <input disabled th:field="*{phone}" type="text" class="form-control" placeholder="Phone number" />
+                                            <span class="text-danger p-1" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="">
+                                            <span class="">Status<span class="ms-2 text-danger">(*)</span></span>
+                                        </p>
+                                        <select th:field="*{status}" class="form-select form-control form-select" aria-label=".form-select-sm example">
+                                                <option selected th:value="true">Đang hoạt động</option>
+                                                <option value="1" th:value="false">Khoá tài khoản</option>
+                                              </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 p-2">
+                                    <input class="btn btn-primary mt-3 w-100" type="submit" value="Submit" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    </div>
+    <th:block th:utext="${message}">
+    </th:block>
+    <script th:inline="javascript">
+    </script>
+</main>
+
+</html>
